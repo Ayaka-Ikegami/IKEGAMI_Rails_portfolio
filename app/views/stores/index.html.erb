@@ -1,0 +1,53 @@
+<div class="container my-4">
+  <h2 class="mb-4">うどん店を探す</h2>
+
+  <!-- 検索フォーム -->
+  <%= form_with url: search_stores_path, method: :get, local: true, class: "row g-3 mb-4" do %>
+    <div class="col-md-8">
+      <%= text_field_tag :keyword, params[:keyword], placeholder: "例: 渋谷 / 横浜", class: "form-control" %>
+    </div>
+    <div class="col-md-4">
+      <%= submit_tag "検索", class: "btn btn-primary w-100" %>
+    </div>
+  <% end %>
+
+  <!-- 検索結果表示 -->
+  <% if @results.present? %>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <% @results.each do |store| %>
+        <div class="col">
+          <div class="card h-100 rounded-5 shadow-sm custom-card">
+            
+            <% if store["photos"] %>
+              <% photo_ref = store["photos"].first["photo_reference"] %>
+              <% photo_url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=#{photo_ref}&key=#{ENV['PLACES_API_KEY']}" %>
+              <img src="<%= photo_url %>" class="card-img-top rounded-5" alt="<%= store['name'] %>の画像">
+            <% else %>
+              <img src="/assets/search_no_image.png" class="card-img-top" alt="画像なし">
+            <% end %>
+
+            <div class="card-body">
+              <h5 class="card-title fs-4"><%= store["name"] %></h5>
+              <p class="card-text text-muted fs-6"><%= store["formatted_address"] || store["vicinity"] %></p>
+
+              <% if store.dig("opening_hours", "open_now") == true %>
+                <span class="badge bg-success">営業中</span>
+              <% elsif store.dig("opening_hours") %>
+                <span class="badge bg-secondary">営業時間外</span>
+              <% end %>
+            </div>
+
+            <% if store["rating"] %>
+              <div class="card-footer rounded-5">
+                <small class="text-muted">評価: <span class="text-danger"><%= store["rating"] %></span> / 5</small>
+              </div>
+            <% end %>
+
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% elsif params[:keyword].present? %>
+    <div class="alert alert-warning mt-4">検索結果が見つかりませんでした。</div>
+  <% end %>
+</div>

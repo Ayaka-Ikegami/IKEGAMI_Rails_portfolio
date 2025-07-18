@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid header-contents px-3">
+
+    <%= link_to "最強のうどん師", root_path, class: "navbar-brand header-logo" %>
+
+    <!-- ハンバーガーメニュー -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#headerNavbar" aria-controls="headerNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- ナビゲーションリンク -->
+    <div class="collapse navbar-collapse" id="headerNavbar">
+      <div class="header-links d-flex align-items-start flex-column flex-lg-row ms-lg-auto me-lg-3">
+        <% if user_signed_in? %>
+          <div class="nav-separator d-lg-none"></div>
+            <%= link_to "最強のうどん師とは", root_path, class: "header-link text-decoration-none text-secondary ms-3 my-2" %>
+            <%= link_to "マイページ", root_path, class: "header-link text-decoration-none text-secondary ms-3 my-2" %>
+          <div class="nav-separator d-lg-none"></div>
+            <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "header-link text-decoration-none text-danger ms-3 my-2" %>
+        <% else %>
+          <div class="nav-separator d-lg-none"></div>
+            <%= link_to "最強のうどん師とは", tops_detail_path, class: "header-link text-decoration-none text-secondary ms-3 my-2" %>
+          <div class="nav-separator d-lg-none"></div>
+            <%= link_to "ログイン", new_user_session_path, class: "header-link text-decoration-none text-secondary ms-3 my-2" %>
+            <%= link_to "新規登録", new_user_registration_path, class: "header-link text-decoration-none text-secondary ms-3 my-2" %>
+            <%= link_to "ゲストログインはこちら", users_guest_sign_in_path, method: :post, class: "header-link header-link-guest text-danger ms-3 my-2" %>
+        <% end %>
+      </div>
+    </div>
+
+  </div>
+</nav>

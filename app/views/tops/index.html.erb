@@ -1,1 +1,87 @@
-<p class="mt-5">トップページです</p>
+<section class="section-1 hero-section py-5">
+  <div class="container">
+    <div class="row align-items-center">
+
+      <!-- うどんアイコン -->
+      <div class="col-md-6 text-center">
+        <%= image_tag "tops_index_section1.png", alt: "うどんの写真", class: "img-fluid w-75 p-5" %>
+      </div>
+      
+      <!-- テキストエリア -->
+      <div class="col-md-6 mb-4 mb-md-0 text-center text-md-start">
+        <h1 class="display-4 fw-bold">うどんは日本の宝物。</h1>
+        <p class="lead text-muted mt-3">「最強のうどん師」は、
+          <br>うどん屋さんに特化した検索・口コミ共有サービスです。</p>
+        <%= link_to "今すぐ探す", stores_path, class: "btn btn-success btn-lg mt-4 px-5" %>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section-2-3 bg-white py-5 px-4">
+  <div class="container">
+    <div class="row">
+
+      <!-- セクション2: 東京のうどん店 -->
+      <div class="col-lg-8 mb-5">
+        <h2 class="mb-4 pb-2 border-bottom">東京の有名うどん店</h2>
+
+        <% if @results.present? %>
+          <div class="row row-cols-1 row-cols-md-2 g-4 m-3">
+            <% @results.each do |store| %>
+              <div class="col">
+                <div class="card h-100 shadow rounded-4">
+                  <% if store["photos"] %>
+                    <% photo_ref = store["photos"].first["photo_reference"] %>
+                    <% photo_url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=#{photo_ref}&key=#{ENV['PLACES_API_KEY']}" %>
+                    <img src="<%= photo_url %>" class="card-img-top rounded-top-4" alt="店舗画像">
+                  <% else %>
+                    <img src="/assets/search_no_image.png" class="card-img-top rounded-top-4" alt="画像なし">
+                  <% end %>
+
+                  <div class="card-body">
+                    <h5 class="card-title"><%= store["name"] %></h5>
+                    <p class="card-text text-muted"><%= store["formatted_address"] %></p>
+
+                    <% if store["rating"] %>
+                      <p class="mb-0">
+                        評価: <%= number_with_precision(store["rating"], precision: 1) %>
+                        <span class="text-warning">★</span>
+                      </p>
+                    <% end %>
+
+                    <% if store.dig("opening_hours", "open_now") == true %>
+                      <span class="badge bg-success my-3">営業中</span>
+                    <% elsif store.dig("opening_hours") %>
+                      <span class="badge bg-secondary mt-3">営業時間外</span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-muted">該当する店舗が見つかりませんでした。</p>
+        <% end %>
+      </div>
+
+      <!-- セクション3: サイト内の口コミ -->
+      <div class="col-lg-4 mb-5">
+        <h2 class="mb-4 pb-2 border-bottom">最新の口コミ</h2>
+
+        <% if @reviews.present? %>
+          <% @reviews.each do |review| %>
+            <div class="mb-4 p-3 border rounded-3 bg-light">
+              <h6 class="fw-bold mb-1"><%= review.user_name %></h6>
+              <small class="text-muted"><%= review.created_at.strftime("%Y/%m/%d") %></small>
+              <p class="mt-2 mb-0"><%= review.content %></p>
+            </div>
+          <% end %>
+        <% else %>
+          <p class="text-muted">まだ口コミが投稿されていません。</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</section>
