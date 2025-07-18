@@ -1,0 +1,11 @@
+.btn-success-light {
+  background-color: rgb(42, 160, 70); /* 緑色の透明度50% */
+  border-color: rgb(42, 160, 70); 
+  color: white;
+}
+
+.btn-success-light:hover {
+  background-color: rgb(24, 131, 49); /* ホバー時は少し濃く */
+  border-color: rgb(24, 131, 49);
+  color: white;
+}

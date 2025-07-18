@@ -12,7 +12,7 @@
         <h1 class="display-4 fw-bold">うどんは日本の宝物。</h1>
         <p class="lead text-muted mt-3">「最強のうどん師」は、
           <br>うどん屋さんに特化した検索・口コミ共有サービスです。</p>
-        <%= link_to "今すぐ探す", stores_path, class: "btn btn-success btn-lg mt-4 px-5" %>
+        <%= link_to "今すぐ探す", stores_path, class: "btn btn-success btn-success-light w-auto mx-auto d-block mt-5" %>
       </div>
 
     </div>
@@ -72,14 +72,14 @@
 
         <% if @reviews.present? %>
           <% @reviews.each do |review| %>
-            <div class="mb-4 p-3 border rounded-3 bg-light">
+            <div class="mb-4 m-3 p-3 border rounded-3 bg-light">
               <h6 class="fw-bold mb-1"><%= review.user_name %></h6>
               <small class="text-muted"><%= review.created_at.strftime("%Y/%m/%d") %></small>
               <p class="mt-2 mb-0"><%= review.content %></p>
             </div>
           <% end %>
         <% else %>
-          <p class="text-muted">まだ口コミが投稿されていません。</p>
+          <p class="text-muted m-3">まだ口コミが投稿されていません。</p>
         <% end %>
       </div>
     </div>
