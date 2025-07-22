@@ -5,10 +5,10 @@ class Users::ProfilesController < ApplicationController
     @user = current_user
   end
 
-  def edit;
+  def edit
   end
 
-  def update;
+  def update
   end
 
   def set_user

@@ -61,9 +61,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   #   super(resource)
   # end
 
-  def configure_permitted_parameters #プロフィール登録時・更新時
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:user_name, :avatar])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:user_name, :avatar])
+  def configure_permitted_parameters # プロフィール登録時・更新時
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :user_name, :avatar ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :user_name, :avatar ])
   end
-  
 end

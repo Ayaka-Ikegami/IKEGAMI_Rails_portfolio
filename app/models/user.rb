@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-  
   devise :database_authenticatable, :registerable,
   :recoverable, :rememberable
 
@@ -21,8 +20,7 @@ private
   def avatar_format
     return unless avatar.attached?
     if !avatar.content_type.in?(%w[image/png image/jpg image/jpeg])
-      errors.add(:avatar, 'はPNG・JPG・JPEG形式のみアップロード可能です')
+      errors.add(:avatar, "はPNG・JPG・JPEG形式のみアップロード可能です")
     end
   end
-
 end
