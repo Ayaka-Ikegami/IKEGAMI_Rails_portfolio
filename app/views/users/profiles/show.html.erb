@@ -1,0 +1,30 @@
+<div class="user-main my-5 mx-4">
+
+  <h2 class="mt-4 mb-3">マイページ</h2>
+
+  <div class="d-flex justify-content-center">
+    <div class="card rounded-4 p-4 shadow-sm w-100" style="max-width: 600px;">
+
+      <div class="d-flex align-items-end mb-3">
+        <% if current_user.avatar.attached? %>
+          <%= image_tag current_user.avatar.variant(resize_to_fill: [64, 64]), class: "rounded-circle me-3", alt: "プロフィール画像" %>
+        <% else %>
+          <i class="bi bi-person-circle text-secondary me-3" style="font-size: 64px;"></i>
+        <% end %>
+
+        <% if @user.user_name.nil? %>
+          <p class="mb-3 ms-3 fs-4 fw-800">ゲスト</p><p class="fs-5 ms-1"> さん</p>
+        <% else %>
+          <p class="mb-3 ms-3 fs-4 fw-800"><%= @user.user_name %></p><p class="fs-5 ms-1">さん</p>
+        <% end %>
+      </div>
+
+      <p class="text-nowrap overflow-auto" style="max-width: 100%;">メールアドレス：<%= @user.email %></p>
+      <p>登録日：<%= l(@user.created_at, format: :long) %></p>
+
+      <%= link_to "アカウント情報の編集", edit_user_registration_path, class: "btn btn-outline-success btn-success-light-hover w-100 mt-4" %>
+      <%= link_to "ログアウトする", destroy_user_session_path, method: :delete, class: "text-decoration-none text-danger mt-3" %>
+
+    </div>
+  </div>
+</div>

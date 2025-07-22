@@ -15,8 +15,9 @@ header {
 }
 
 .header-links {
-  display: flex;
-  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  flex-wrap: nowrap;
 }
 
 .header-link-text-decoration-none {

@@ -13,6 +13,10 @@ Rails.application.routes.draw do
     post "users/guest_sign_in", to: "users/sessions#guest_sign_in"
   end
 
+  namespace :users do
+    resource :profile, only: %i[show edit update]
+  end
+
   get "/stores", to: "stores#index"
   get "/stores/search", to: "stores#search", as: :search_stores
 

@@ -70,3 +70,6 @@ gem "devise"
 
 gem "dotenv-rails"
 gem "google_places"
+
+gem "rails-i18n"
+gem "image_processing", "~> 1.2"
