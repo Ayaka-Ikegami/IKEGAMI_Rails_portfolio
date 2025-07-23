@@ -10,7 +10,7 @@ class TopsController < ApplicationController
     # レート4.0以上のうどん屋をランダムに最大6件表示
     all_results = json["results"] || []
     high_rated = all_results.select { |store| store["rating"].to_f >= 4.0 }
-    @results = high_rated.sample(6)
+    @results = high_rated.sample(4)
 
     # @reviews = Review.order(created_at: :desc).limit(5) # 最新5件の口コミを表示
   end

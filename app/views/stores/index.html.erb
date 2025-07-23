@@ -1,22 +1,94 @@
-<div class="container my-4">
-  <h2 class="mb-4">うどん店を探す</h2>
+<div class="container my-5">
+  <div class="store-index-header d-flex justify-content-between align-items-center">
+    <h2 class="mb-4">うどん店を探す</h2>
+    <%= link_to "トップページに戻る", root_path, class: "text-decoration-none" %> 
+  </div>
 
-  <!-- 検索フォーム -->
-  <%= form_with url: search_stores_path, method: :get, local: true, class: "row g-3 mb-4" do %>
-    <div class="col-md-8">
-      <%= text_field_tag :keyword, params[:keyword], placeholder: "例: 渋谷 / 横浜", class: "form-control" %>
+<%= form_with url: search_stores_path, method: :get, local: true, id: "search-form", class: "store-search-form border rounded-4 shadow-sm bg-light p-4 mx-3" do %>
+
+  <!-- ▼ 地域検索ゾーン（現在地 or 地名 必須） -->
+  <div class="row g-3 align-items-end border-bottom pb-3 mb-3">
+
+    <!-- 現在地チェックボックス & 距離選択 -->
+    <div class="col-md-6">
+      <label class="form-label text-success">地域の指定</label>
+      <div class="d-flex align-items-center gap-3">
+        <div class="form-check mb-0">
+          <%= check_box_tag :use_current_location, '1', false, id: "use-current-location", class: "form-check-input" %>
+          <label class="form-check-label" for="use-current-location">現在地で検索する</label>
+        </div>
+        <%= select_tag :radius, options_for_select([[ "200m", 200 ], [ "500m", 500 ], [ "1km", 1000 ], [ "3km", 3000 ]], params[:radius]), class: "form-select w-auto rounded-4", id: "radius-select", disabled: true %>
+      </div>
     </div>
-    <div class="col-md-4">
-      <%= submit_tag "検索", class: "btn btn-primary w-100" %>
+
+    <!-- 地名入力 -->
+    <div class="col-md-6">
+      <label for="location-input" class="form-label text-success">地名で検索</label>
+      <%= text_field_tag :location, params[:location], placeholder: "例: 池袋、新宿など", class: "form-control rounded-4", id: "location-input" %>
     </div>
-  <% end %>
+
+  </div>
+
+  <!-- ▼ キーワード検索ゾーン -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-12">
+      <label for="keyword" class="form-label text-success">キーワード検索</label>
+      <%= text_field_tag :keyword, params[:keyword], placeholder: "例: 釜玉うどん、天ぷらなど", class: "form-control rounded-4" %>
+    </div>
+  </div>
+
+  <!-- 並び替えオプション -->
+  <div class="row g-3 mb-3">
+  <div class="col-md-4">
+    <label for="sort" class="form-label text-success">並び替え</label>
+    <%= select_tag :sort, options_for_select([["おすすめ順（Googleデフォルト）", ""], ["評価順", "rating"]], params[:sort]), class: "form-select rounded-4" %>
+  </div>
+  </div>
+
+  <!-- 緯度経度hidden -->
+  <%= hidden_field_tag :lat, params[:lat], id: "lat-input" %>
+  <%= hidden_field_tag :lng, params[:lng], id: "lng-input" %>
+
+  <!-- ▼ 検索ボタン -->
+  <div class="row mt-3">
+    <div class="col-12 col-md-12 d-flex flex-column flex-md-row gap-2 mt-3">
+      <%= submit_tag "検索する", class: "btn btn-success btn-success-light rounded-4 w-100 flex-md-grow-1 px-4 py-2", id: "search-button", disabled: true %>
+      <button type="button" id="reset-form" class="btn btn-outline-secondary rounded-4 w-100 w-md-auto px-3 py-2">リセット</button>
+    </div>
+  </div>
+
+<% end %>
 
   <!-- 検索結果表示 -->
   <% if @results.present? %>
-    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+
+    <% if params[:keyword].present? || params[:location].present? || (params[:lat].present? && params[:lng].present?) %>
+      <div class="mt-5 ms-3">
+        <span class="text-muted">
+          「
+          <%= begin
+            if params[:location].present?
+              [params[:location], params[:keyword]].compact.reject(&:blank?).join(" × ")
+            elsif params[:lat].present? && params[:lng].present?
+              # 現在地検索の場合
+              ["現在地", params[:keyword]].compact.reject(&:blank?).join(" × ")
+            else
+              params[:keyword]
+            end
+          end %>
+          」で検索中……
+        </span>
+      </div>
+    <% end %>
+
+    <h5 class="result-count mt-2 ms-3"><span class="fs-2 fw-800 me-1"><%= @results.count %></span>店が見つかりました<span class="fs-6">（最大で20店の表示）</span></h5>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 p-5">
       <% @results.each do |store| %>
         <div class="col">
-          <div class="card h-100 rounded-5 shadow-sm custom-card">
+        
+          <%= link_to store_path(store["place_id"]), class: "text-decoration-none text-dark" do %>
+          <div class="card h-100 rounded-5 shadow-sm custom-card m-2">
             
             <% if store["photos"] %>
               <% photo_ref = store["photos"].first["photo_reference"] %>
@@ -44,10 +116,14 @@
             <% end %>
 
           </div>
+          <% end %>
+
         </div>
       <% end %>
     </div>
+
   <% elsif params[:keyword].present? %>
     <div class="alert alert-warning mt-4">検索結果が見つかりませんでした。</div>
   <% end %>
+
 </div>

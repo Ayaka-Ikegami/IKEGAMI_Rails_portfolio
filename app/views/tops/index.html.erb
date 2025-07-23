@@ -12,7 +12,8 @@
         <h1 class="display-4 fw-bold">うどんは日本の宝物。</h1>
         <p class="lead text-muted mt-3">「最強のうどん師」は、
           <br>うどん屋さんに特化した検索・口コミ共有サービスです。</p>
-        <%= link_to "今すぐ探す", stores_path, class: "btn btn-success btn-success-light w-auto mx-auto d-block mt-5" %>
+          <%= link_to "詳しく探す", stores_path, class: "btn btn-success btn-success-light w-100 mx-auto d-block rounded-4 fs-5 py-3 mt-5" %>
+          <button type="button" id="search-nearby-btn" class="btn btn-outline-success btn-success-light-hover w-100 mx-auto d-block rounded-4 fs-5 py-3 mt-3">今すぐ現在地から探す</button>
       </div>
 
     </div>
@@ -25,42 +26,45 @@
 
       <!-- セクション2: 東京のうどん店 -->
       <div class="col-lg-8 mb-5">
-        <h2 class="mb-4 pb-2 border-bottom">東京の有名うどん店</h2>
+        <h2 class="mb-4 pb-2 border-bottom">東京の高評価うどん店<span class="fs-5">（ランダム）</span></h2>
 
         <% if @results.present? %>
           <div class="row row-cols-1 row-cols-md-2 g-4 m-3">
             <% @results.each do |store| %>
               <div class="col">
-                <div class="card h-100 shadow rounded-4">
-                  <% if store["photos"] %>
-                    <% photo_ref = store["photos"].first["photo_reference"] %>
-                    <% photo_url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=#{photo_ref}&key=#{ENV['PLACES_API_KEY']}" %>
-                    <img src="<%= photo_url %>" class="card-img-top rounded-top-4" alt="店舗画像">
-                  <% else %>
-                    <img src="/assets/search_no_image.png" class="card-img-top rounded-top-4" alt="画像なし">
-                  <% end %>
-
-                  <div class="card-body">
-                    <h5 class="card-title"><%= store["name"] %></h5>
-                    <p class="card-text text-muted"><%= store["formatted_address"] %></p>
-
-                    <% if store["rating"] %>
-                      <p class="mb-0">
-                        評価: <%= number_with_precision(store["rating"], precision: 1) %>
-                        <span class="text-warning">★</span>
-                      </p>
+                <%= link_to store_path(store["place_id"]), class: "text-decoration-none text-dark" do %>
+                  <div class="card h-100 shadow rounded-4">
+                    <% if store["photos"] %>
+                      <% photo_ref = store["photos"].first["photo_reference"] %>
+                      <% photo_url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=#{photo_ref}&key=#{ENV['PLACES_API_KEY']}" %>
+                      <img src="<%= photo_url %>" class="card-img-top rounded-top-4" alt="店舗画像">
+                    <% else %>
+                      <img src="/assets/search_no_image.png" class="card-img-top rounded-top-4" alt="画像なし">
                     <% end %>
 
-                    <% if store.dig("opening_hours", "open_now") == true %>
-                      <span class="badge bg-success my-3">営業中</span>
-                    <% elsif store.dig("opening_hours") %>
-                      <span class="badge bg-secondary mt-3">営業時間外</span>
-                    <% end %>
+                    <div class="card-body">
+                      <h5 class="card-title"><%= store["name"] %></h5>
+                      <p class="card-text text-muted"><%= store["formatted_address"] %></p>
+                      <% if store["rating"] %>
+                        <p class="mb-0">
+                          評価: <%= number_with_precision(store["rating"], precision: 1) %>
+                          <span class="text-warning">★</span>
+                        </p>
+                      <% end %>
+
+                      <% if store.dig("opening_hours", "open_now") == true %>
+                        <span class="badge bg-success my-3">営業中</span>
+                      <% elsif store.dig("opening_hours") %>
+                        <span class="badge bg-secondary mt-3">営業時間外</span>
+                      <% end %>
+                    </div>
+
                   </div>
-                </div>
+                <% end %>
               </div>
             <% end %>
           </div>
+
         <% else %>
           <p class="text-muted">該当する店舗が見つかりませんでした。</p>
         <% end %>

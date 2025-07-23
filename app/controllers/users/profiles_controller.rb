@@ -1,14 +1,8 @@
 class Users::ProfilesController < ApplicationController
-  before_action :set_user, only: %i[show edit update]
+  before_action :set_user, only: %i[show]
 
   def show
     @user = current_user
-  end
-
-  def edit
-  end
-
-  def update
   end
 
   def set_user

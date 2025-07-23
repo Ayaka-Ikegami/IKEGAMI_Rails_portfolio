@@ -9,4 +9,5 @@ import "controllers"
 
 import "@rails/ujs"
 
-import "main"
+import "search_form"
+import "top_search_nearby"

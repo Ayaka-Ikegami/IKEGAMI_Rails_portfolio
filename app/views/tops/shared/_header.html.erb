@@ -10,8 +10,8 @@
     <% if user_signed_in? %>
       <div class="order-lg-2 ms-auto d-flex align-items-center">
 
-      <!-- タテ線（大画面のみ表示） -->
-      <div class="d-none d-lg-block border-start mx-4" style="height: 35px; border-color: #ccc;"></div>
+        <!-- タテ線（大画面のみ表示） -->
+        <div class="d-none d-lg-block border-start mx-4" style="height: 35px; border-color: #ccc;"></div>
 
         <%= link_to users_profile_path, class: "text-decoration-none d-flex align-items-center" do %>
           <% if current_user.avatar.attached? %>
@@ -19,13 +19,19 @@
           <% else %>
             <i class="bi bi-person-circle text-secondary ms-2 me-3" style="font-size: 40px;"></i>
           <% end %>
-            <div class="header-username d-none d-lg-block text-dark fw-600 me-3"><%= current_user.user_name %></div>
+
+          <% if @user && @user.user_name.present? %>
+            <div class="header-username d-none d-lg-block text-success fw-600 me-3"><%= current_user.user_name %></div>
+          <% else %>
+            <div class="header-username d-none d-lg-block text-success fw-600 me-3">ゲスト</div>
+          <% end %>
         <% end %>
+
       </div>
     <% end %>
 
     <!-- ハンバーガーメニュー -->
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#headerNavbar" aria-controls="headerNavbar" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#headerNavbar" aria-controls="headerNavbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -34,21 +40,23 @@
       <div class="header-links d-flex align-items-start flex-column flex-lg-row ms-lg-auto me-lg-3">
         <% if user_signed_in? %>
         <div class="nav-separator d-lg-none"></div>
-          <%= link_to "トップページ", root_path, class: "header-link text-decoration-none text-secondary fs-13 ms-3 my-2" %>
+          <%= link_to "トップページ", root_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
+          <%= link_to "検索する", stores_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
         <div class="nav-separator d-lg-none"></div>
-          <%= link_to "最強のうどん師とは", tops_detail_path, class: "header-link text-decoration-none text-secondary fs-13 ms-3 my-2" %>
+          <%= link_to "最強のうどん師とは", tops_detail_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
         <div class="nav-separator d-lg-none"></div>
-          <%= link_to "マイページ", users_profile_path, class: "d-lg-none header-link text-decoration-none text-secondary fs-13 ms-3 my-2" %>
-          <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "header-link text-decoration-none text-danger fs-13 fw-800 ms-3 my-2" %>
+          <%= link_to "マイページ", users_profile_path, class: "d-lg-none header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
+          <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "header-link text-decoration-none text-danger fs-13 fw-800 ms-4 my-2" %>
         <% else %>
         <div class="nav-separator d-lg-none"></div>
-          <%= link_to "トップページ", root_path, class: "header-link text-decoration-none text-secondary fs-13 ms-3 my-2" %>
+          <%= link_to "トップページ", root_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
+          <%= link_to "検索する", stores_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
         <div class="nav-separator d-lg-none"></div>
-          <%= link_to "最強のうどん師とは", tops_detail_path, class: "header-link text-decoration-none text-secondary fs-13 ms-3 my-2" %>
+          <%= link_to "最強のうどん師とは", tops_detail_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
         <div class="nav-separator d-lg-none"></div>
-          <%= link_to "ログイン", new_user_session_path, class: "header-link text-decoration-none text-secondary fs-13 ms-3 my-2" %>
-          <%= link_to "新規登録", new_user_registration_path, class: "header-link text-decoration-none text-secondary fs-13 ms-3 my-2" %>
-          <%= link_to "ゲストログインはこちら", users_guest_sign_in_path, method: :post, class: "header-link header-link-guest text-danger fs-13 fw-800 ms-3 my-2" %>
+          <%= link_to "ログイン", new_user_session_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
+          <%= link_to "新規登録", new_user_registration_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
+          <%= link_to "ゲストログインはこちら", users_guest_sign_in_path, method: :post, class: "header-link header-link-guest text-danger fs-13 fw-800 ms-4 my-2" %>
         <% end %>
       </div>
     </div>

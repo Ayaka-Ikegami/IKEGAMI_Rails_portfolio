@@ -1,0 +1,149 @@
+<div class="container p-4 my-5">
+  <div class="store-show-header d-flex justify-content-between align-items-center">
+    <h2 class="mb-4 fw-800"><%= @store["name"] %></h2>
+    <%= link_to "トップページに戻る", root_path, class: "text-decoration-none" %> 
+  </div>
+
+  <div class="row g-4">
+    <!-- 左：地図 + 写真 + 店舗情報 -->
+    <div class="col-12 col-md-8">
+
+      <!-- 地図 -->
+      <% if @store.dig("geometry", "location") %>
+        <% lat = @store["geometry"]["location"]["lat"] %>
+        <% lng = @store["geometry"]["location"]["lng"] %>
+        <div class="rounded-4 shadow-sm overflow-hidden mb-3" style="height: 250px;">
+          <iframe
+            width="100%"
+            height="100%"
+            frameborder="0"
+            style="border:0"
+            src="https://www.google.com/maps/embed/v1/place?key=<%= ENV['GOOGLE_MAPS_EMBED_API_KEY'] %>&q=<%= lat %>,<%= lng %>"
+            allowfullscreen>
+          </iframe>
+        </div>
+      <% end %>
+
+      <!-- 写真 + 店舗情報 -->
+      <div class="card shadow-sm rounded-4">
+        <% if @store["photos"] %>
+          <div id="photo-carousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner rounded-top-4" style="height: 250px;">
+              <% @store["photos"].first(3).each_with_index do |photo, i| %>
+                <% photo_url = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=800&photoreference=#{photo["photo_reference"]}&key=#{ENV['PLACES_API_KEY']}" %>
+                <div class="carousel-item <%= 'active' if i == 0 %>">
+                  <img src="<%= photo_url %>" class="d-block w-100 object-fit-cover" style="height: 250px;" alt="写真<%= i + 1 %>">
+                </div>
+              <% end %>
+            </div>
+
+            <% if @store["photos"].size > 1 %>
+              <button class="carousel-control-prev" type="button" data-bs-target="#photo-carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+              </button>
+              <button class="carousel-control-next" type="button" data-bs-target="#photo-carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+              </button>
+            <% end %>
+          </div>
+        <% else %>
+          <img src="/assets/search_no_image.png" class="card-img-top" alt="画像なし">
+        <% end %>
+
+        <!-- 店舗情報 -->
+        <div class="card-body py-3 px-4 small">
+          <table class="table table-bordered align-middle mb-0 border-secondary-subtle">
+            <tbody>
+              <tr>
+                <th class="text-end text-muted fw-bold border-end pe-2" style="width: 90px;">住所</th>
+                <td>
+                  <% if @store["formatted_address"] %>
+                    <% zip = @store["formatted_address"].match(/〒\d{3}-\d{4}|〒\d{7}/).to_s %>
+                    <% addr = @store["formatted_address"].gsub(/日本、?\s?〒?\d{3}-?\d{4}/, "") %>
+                    <div><%= zip %></div>
+                    <div><%= addr.strip %></div>
+                  <% else %>
+                    情報なし
+                  <% end %>
+                </td>
+              </tr>
+              <tr>
+                <th class="text-end text-muted fw-bold border-end pe-2">電話番号</th>
+                <td><%= @store["formatted_phone_number"] || "情報なし" %></td>
+              </tr>
+              <% if @store["rating"] %>
+                <tr>
+                  <th class="text-end text-muted fw-bold border-end pe-2">評価</th>
+                  <td><%= @store["rating"] %> / 5</td>
+                </tr>
+              <% end %>
+
+              <% if @store.dig("opening_hours", "open_now") != nil %>
+                <% open_now = @store["opening_hours"]["open_now"] %>
+                <tr class="<%= open_now ? 'bg-success-subtle' : 'bg-danger-subtle' %>">
+                  <th class="text-end text-muted fw-bold border-end pe-2">営業状況</th>
+                  <td class="fw-bold">
+                    <% if open_now %>
+                      <span class="text-success">営業中</span>
+                    <% else %>
+                      <span class="text-danger">営業時間外</span>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+
+              <% if @store.dig("opening_hours", "weekday_text") %>
+                <tr>
+                  <th class="text-end text-muted fw-bold border-end pe-2 align-top">営業時間</th>
+                  <td>
+                    <ul class="mb-0 ps-3 list-unstyled">
+                      <% @store["opening_hours"]["weekday_text"].each do |line| %>
+                        <li class="list-style-none"><%= line %></li>
+                      <% end %>
+                    </ul>
+                  </td>
+                </tr>
+              <% end %>
+              <tr>
+                <th class="text-end text-muted fw-bold border-end pe-2">マップ</th>
+                <td>
+                  <a href="<%= @store["url"] %>" target="_blank" class="btn btn-outline-success .btn-success-light-hover btn-sm">Googleマップで見る（別タブ）</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div> <!-- card-body -->
+      </div> <!-- card -->
+    </div> <!-- col-md-8 -->
+
+    <!-- 右：口コミ -->
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm rounded-4 small">
+        <div class="card-body px-3 py-4">
+          <h5 class="card-title mb-3 text-success">口コミ</h5>
+
+          <!-- 投稿フォーム -->
+          <form action="#" method="post">
+            <div class="mb-2">
+              <textarea class="form-control form-control-sm rounded-3" rows="3" placeholder="このお店の感想を入力..."></textarea>
+            </div>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-md btn-success rounded-3">投稿する</button>
+            </div>
+          </form>
+
+          <hr>
+
+          <!-- 既存の口コミ（仮） -->
+          <div class="mt-3"  style="max-height: 200px; overflow-y: auto;">
+            <p class="mb-1"><strong>ユーザーA</strong> <small class="text-muted">（2日前）</small></p>
+            <p class="text-muted mb-2">天ぷらがサクサクで美味しかった！</p>
+
+            <p class="mb-1"><strong>ユーザーB</strong> <small class="text-muted">（1週間前）</small></p>
+            <p class="text-muted mb-0">ランチのコスパ最高です✨</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> <!-- row -->
+</div> <!-- container -->

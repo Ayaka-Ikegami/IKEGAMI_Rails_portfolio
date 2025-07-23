@@ -11,4 +11,5 @@ pin "@popperjs/core", to: "popper.js", preload: true
 
 pin "@rails/ujs", to: "rails-ujs.js"
 
-pin "main", to: "main.js"
+pin "search_form"
+pin "top_search_nearby"

@@ -17,8 +17,11 @@ Rails.application.routes.draw do
     resource :profile, only: %i[show edit update]
   end
 
-  get "/stores", to: "stores#index"
-  get "/stores/search", to: "stores#search", as: :search_stores
+  resources :stores, only: [ :index, :show ] do
+    collection do
+      get :search
+    end
+  end
 
   get "up" => "rails/health#show", as: :rails_health_check
 
