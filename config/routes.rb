@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   get "tops/tos"
   get "tops/privacy"
 
-
   devise_for :users, controllers: {
     registrations: "users/registrations",
     sessions:      "users/sessions"
@@ -15,13 +14,16 @@ Rails.application.routes.draw do
 
   namespace :users do
     resource :profile, only: %i[show edit update]
+    resources :users, only: [ :show ]
   end
 
-  resources :stores, only: [ :index, :show ] do
+  resources :stores, only: %i[index show], param: :place_id do
     collection do
       get :search
     end
   end
+
+  resources :reviews
 
   get "up" => "rails/health#show", as: :rails_health_check
 

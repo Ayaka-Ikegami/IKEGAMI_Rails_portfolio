@@ -1,7 +1,7 @@
 <div class="container my-5">
-  <div class="store-index-header d-flex justify-content-between align-items-center">
-    <h2 class="mb-4">うどん店を探す</h2>
-    <%= link_to "トップページに戻る", root_path, class: "text-decoration-none" %> 
+  <div class="store-index-header ms-2">
+    <%= link_to "←トップページに戻る", root_path, class: "text-decoration-none" %>   
+    <h2 class="mt-3 mb-4">うどん店を探す</h2>
   </div>
 
 <%= form_with url: search_stores_path, method: :get, local: true, id: "search-form", class: "store-search-form border rounded-4 shadow-sm bg-light p-4 mx-3" do %>

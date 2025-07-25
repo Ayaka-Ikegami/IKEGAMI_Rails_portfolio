@@ -3,6 +3,7 @@ class Users::ProfilesController < ApplicationController
 
   def show
     @user = current_user
+    @reviews = @user.reviews.includes(:store).order(created_at: :desc)
   end
 
   def set_user

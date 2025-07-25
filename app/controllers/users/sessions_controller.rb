@@ -26,7 +26,7 @@ class Users::SessionsController < Devise::SessionsController
   # end
 
   def after_sign_in_path_for(resource)
-    root_path
+    stored_location_for(resource) || root_path
   end
 
   def after_sign_out_path_for(resource)
@@ -36,6 +36,6 @@ class Users::SessionsController < Devise::SessionsController
   def guest_sign_in
     user = User.guest
     sign_in user
-    redirect_to root_path, notice: "ゲストユーザーとしてログインしました。"
+    redirect_to stored_location_for(:user) || root_path, notice: "ゲストユーザーとしてログインしました。"
   end
 end

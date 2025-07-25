@@ -11,3 +11,4 @@ import "@rails/ujs"
 
 import "search_form"
 import "top_search_nearby"
+import "rating_stars"

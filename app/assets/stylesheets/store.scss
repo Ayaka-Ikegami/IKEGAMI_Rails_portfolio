@@ -2,3 +2,33 @@ input[type="checkbox"]:disabled {
   opacity: 0.6;
   pointer-events: none;
 }
+
+.star-rating {
+  display: flex;
+  gap: 20px;
+  font-size: 25px;
+  cursor: pointer;
+  max-width: 170px;
+  overflow: hidden;
+}
+
+.star {
+  color: #ccc;
+  transition: color 0.2s;
+  max-width: 5px;
+}
+
+.star.selected,
+.star.hovered {
+  color: #ffc907;
+  text-shadow:
+    0 0 2px #000,
+    0 0 4px #fff,
+    0 0 8px #ffc107;
+}
+
+.wavy-hr {
+  border: none;
+  border-top: 2px dashed #ccc;
+  margin-top: 10px;
+}

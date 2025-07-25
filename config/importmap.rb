@@ -13,3 +13,4 @@ pin "@rails/ujs", to: "rails-ujs.js"
 
 pin "search_form"
 pin "top_search_nearby"
+pin "rating_stars"

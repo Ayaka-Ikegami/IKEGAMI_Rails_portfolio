@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :reviews, dependent: :destroy
+
   devise :database_authenticatable, :registerable,
   :recoverable, :rememberable
 
@@ -9,11 +11,14 @@ class User < ApplicationRecord
   has_one_attached :avatar
   validate :avatar_format
 
-  def self.guest
-    find_or_create_by!(email: "guest@example.com") do |user|
-      user.password = SecureRandom.urlsafe_base64
-    end
+def self.guest
+  find_or_create_by!(email: "guest@example.com") do |user|
+    user.password = SecureRandom.urlsafe_base64
+    user.name = "ゲスト"
+  end.tap do |user|
+    user.update(user_name: "ゲスト") if user.user_name.blank?
   end
+end
 
 private
 

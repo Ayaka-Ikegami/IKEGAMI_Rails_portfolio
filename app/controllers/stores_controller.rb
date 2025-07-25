@@ -1,9 +1,10 @@
-class StoresController < ApplicationController
-  require "net/http"
-  require "uri"
-  require "json"
+require "net/http"
+require "uri"
+require "json"
 
-  def index; # 検索フォーム表示
+class StoresController < ApplicationController
+  def index
+    # 検索フォーム表示
   end
 
   def search
@@ -45,7 +46,7 @@ class StoresController < ApplicationController
     json = JSON.parse(response)
 
     if json["status"] == "OK"
-      @results = json["results"]
+      @results = json.dig("results") || []
       @results = @results.sort_by { |r| -r["rating"].to_f } if order_by_rating
       @results = @results.first(20)
     else
@@ -57,7 +58,7 @@ class StoresController < ApplicationController
   end
 
   def show # 各店舗の詳細ページ
-    place_id = params[:id]
+    place_id = params[:place_id]
     api_key = ENV["PLACES_API_KEY"]
 
     uri = URI("https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&language=ja&key=#{api_key}")
@@ -65,9 +66,18 @@ class StoresController < ApplicationController
     json = JSON.parse(response)
 
     if json["status"] == "OK"
-      @store = json["result"]
+      @google_store = json["result"]
     else
       redirect_to root_path, alert: "店舗情報が取得できませんでした（#{json['status']}）"
+      return
     end
+
+    @store = Store.find_or_initialize_by(place_id: place_id)
+    @store.name = @google_store["name"]
+    @store.address = @google_store["formatted_address"]
+    @store.save!
+
+    @reviews = @store.reviews.includes(:user).order(created_at: :desc)
+    @review = Review.new  # 口コミレビュー新規投稿
   end
 end

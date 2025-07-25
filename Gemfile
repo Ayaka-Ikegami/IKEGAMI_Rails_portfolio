@@ -73,3 +73,6 @@ gem "google_places"
 
 gem "rails-i18n"
 gem "image_processing", "~> 1.2"
+
+gem "kaminari"
+gem "ransack"

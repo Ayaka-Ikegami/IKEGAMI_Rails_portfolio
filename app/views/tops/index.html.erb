@@ -10,10 +10,14 @@
       <!-- テキストエリア -->
       <div class="col-md-6 mb-4 mb-md-0 text-center text-md-start">
         <h1 class="display-4 fw-bold">うどんは日本の宝物。</h1>
-        <p class="lead text-muted mt-3">「最強のうどん師」は、
-          <br>うどん屋さんに特化した検索・口コミ共有サービスです。</p>
-          <%= link_to "詳しく探す", stores_path, class: "btn btn-success btn-success-light w-100 mx-auto d-block rounded-4 fs-5 py-3 mt-5" %>
-          <button type="button" id="search-nearby-btn" class="btn btn-outline-success btn-success-light-hover w-100 mx-auto d-block rounded-4 fs-5 py-3 mt-3">今すぐ現在地から探す</button>
+        <p class="lead text-muted mt-3">
+          「最強のうどん師」は、
+          <br>うどん屋さんに特化した検索・口コミ共有サービスです。
+        </p>
+        <%= link_to "詳しく探す", stores_path, class: "btn btn-success btn-success-light w-100 mx-auto d-block rounded-4 fs-5 py-3 mt-5" %>
+        <button type="button" id="search-nearby-btn" class="btn btn-outline-success btn-success-light-hover w-100 mx-auto d-block rounded-4 fs-5 py-3 mt-3">
+          今すぐ現在地から探す
+        </button>
       </div>
 
     </div>
@@ -26,13 +30,15 @@
 
       <!-- セクション2: 東京のうどん店 -->
       <div class="col-lg-8 mb-5">
-        <h2 class="mb-4 pb-2 border-bottom">東京の高評価うどん店<span class="fs-5">（ランダム）</span></h2>
+        <h2 class="mb-4 pb-2 border-bottom">
+          東京の高評価うどん店<span class="fs-5">（ランダム4店！）</span>
+        </h2>
 
         <% if @results.present? %>
-          <div class="row row-cols-1 row-cols-md-2 g-4 m-3">
+          <div class="row row-cols-1 row-cols-md-2 g-4">
             <% @results.each do |store| %>
               <div class="col">
-                <%= link_to store_path(store["place_id"]), class: "text-decoration-none text-dark" do %>
+                <%= link_to store_path(place_id: store["place_id"]), class: "text-decoration-none text-dark" do %>
                   <div class="card h-100 shadow rounded-4">
                     <% if store["photos"] %>
                       <% photo_ref = store["photos"].first["photo_reference"] %>
@@ -58,34 +64,34 @@
                         <span class="badge bg-secondary mt-3">営業時間外</span>
                       <% end %>
                     </div>
-
                   </div>
                 <% end %>
               </div>
             <% end %>
           </div>
-
         <% else %>
           <p class="text-muted">該当する店舗が見つかりませんでした。</p>
         <% end %>
       </div>
 
       <!-- セクション3: サイト内の口コミ -->
-      <div class="col-lg-4 mb-5">
-        <h2 class="mb-4 pb-2 border-bottom">最新の口コミ</h2>
+      <div class="col-lg-4 mb-5 d-flex flex-column">
+        <h2 class="mb-4 pb-2 border-bottom">最新5件の口コミ</h2>
 
         <% if @reviews.present? %>
-          <% @reviews.each do |review| %>
-            <div class="mb-4 m-3 p-3 border rounded-3 bg-light">
-              <h6 class="fw-bold mb-1"><%= review.user_name %></h6>
-              <small class="text-muted"><%= review.created_at.strftime("%Y/%m/%d") %></small>
-              <p class="mt-2 mb-0"><%= review.content %></p>
-            </div>
-          <% end %>
+          <!-- スクロールコンテナ -->
+          <div class="overflow-auto" style="max-height: 800px;">
+            <% @reviews.each do |review| %>
+              <div class="mb-4">
+                <%= render partial: "shared/review_card", locals: { review: review, show_user_info: true, show_delete: false, show_store_info: true } %>
+              </div>
+            <% end %>
+          </div>
         <% else %>
           <p class="text-muted m-3">まだ口コミが投稿されていません。</p>
         <% end %>
       </div>
+
     </div>
   </div>
 </section>

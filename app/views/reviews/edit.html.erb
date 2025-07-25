@@ -1,0 +1,52 @@
+<div class="container p-4 mt-4 mb-5" style="max-width: 700px;">
+
+  <%= link_to "←トップページに戻る", root_path, class: "text-decoration-none text-start" %>
+  <h2 class="mt-3 mb-4 fw-bold text-success"><%= @store.name %></h2>
+
+  <% if @store.address.present? %>
+    <% zip = @store.address.match(/〒\d{3}-\d{4}|〒\d{7}/).to_s %>
+    <% addr = @store.address.gsub(/日本、?\s?〒?\d{3}-?\d{4}/, "") %>
+    <div class="text-secondary mb-3">
+      <div><%= zip %></div>
+      <div><%= addr.strip %></div>
+    </div>
+  <% end %>
+
+  <div class="card shadow-sm rounded-4">
+    <div class="card-body px-4 py-4">
+      <h5 class="card-title pb-3 border-bottom mb-4 text-secondary fw-bold">口コミ編集</h5>
+
+      <%= form_with model: @review, local: true do |f| %>
+        <%= f.hidden_field :store_id, value: @store.id %>
+
+        <% if @review.errors.any? %>
+          <div class="alert alert-danger">
+            <ul>
+              <% @review.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="mb-3">
+          <%= f.label :rating, "評価", class: "form-label form-esse fw-bold" %>
+          <div class="star-rating" data-selected="<%= @review.rating || 0 %>">
+            <% 1.upto(5) do |i| %>
+              <span class="star" data-value="<%= i %>">★</span>
+            <% end %>
+            <%= f.hidden_field :rating, id: "rating-field" %>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :comment, "コメント", class: "form-label form-esse fw-bold" %>
+          <%= f.text_area :comment, rows: 4, class: "form-control", placeholder: "コメントを入力してください" %>
+        </div>
+
+        <%= f.submit "更新する", class: "btn btn-success btn-success-light w-100" %>
+        <%= link_to "戻る", users_profile_path, class: "btn btn-outline-success btn-success-light-hover w-100 mt-3" %>
+      <% end %>
+    </div>
+  </div>
+</div>

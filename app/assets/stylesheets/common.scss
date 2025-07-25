@@ -40,6 +40,11 @@ body {
   text-decoration: none;
 }
 
+::placeholder { //placeholder の文字サイズを変更
+  font-size: 15px;
+  color: #999;
+}
+
 .form-esse::after { //入力必須フォームの目印
   content: "*";
   color: rgb(255, 0, 0);
@@ -49,4 +54,32 @@ body {
   color: rgb(255, 0, 0);
   font-size: 12px;
   font-style: italic;
+}
+
+.notice {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
+  background-color: rgb(213, 0, 110);
+  border-radius: 5px;
+  box-shadow: 0 0 8px rgb(114, 0, 72);
+  color: #fff;
+  padding: 10px 50px;
+  z-index: 10;
+}
+
+.alert {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: fit-content;
+  background-color: rgb(255, 54, 54);
+  border-radius: 5px;
+  box-shadow: 0 0 5px rgb(58, 0, 0);
+  color: #fff;
+  padding: 10px 50px;
+  z-index: 10;
 }

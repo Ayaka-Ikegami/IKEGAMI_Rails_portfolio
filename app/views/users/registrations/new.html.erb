@@ -1,52 +1,53 @@
 <div class="user-main my-5 mx-4 d-flex justify-content-center">
 
-<div class="card rounded-4 w-100" style="max-width: 600px;">
-  <h2 class="mt-4 text-center">新規登録</h2>
-<div class="card-body">
+  <div class="card rounded-4 w-100" style="max-width: 600px;">
+    <h2 class="mt-4 text-center">新規登録</h2>
+    
+    <div class="card-body">
 
-<%= form_for(@user, url: {controller: 'registrations', action: 'create'}) do |f| %>
+    <%= form_for(@user, url: {controller: 'registrations', action: 'create'}) do |f| %>
 
-  <div class="field my-4">
-    <label for="user_user_name" class="form-esse">ユーザー名</label>
-    <%= f.text_field :user_name, autofocus: true, autocomplete: "name", placeholder: "ユーザー名を入力", class: "form-control bg-success bg-opacity-10 border-success-subtle" %>
-    <% @user.errors.where(:user_name).each do |error| %>
-      <p class="error-text"><%= error.full_message %></p>
+      <div class="field my-4">
+        <label for="user_user_name" class="form-esse">ユーザー名</label>
+        <%= f.text_field :user_name, autofocus: true, autocomplete: "name", placeholder: "ユーザー名を入力", class: "form-control bg-success bg-opacity-10 border-success-subtle" %>
+        <% @user.errors.where(:user_name).each do |error| %>
+          <p class="error-text"><%= error.full_message %></p>
+        <% end %>
+      </div>
+
+      <div class="field my-4">
+        <label for="user_email" class="form-esse">メールアドレス</label>
+        <%= f.text_field :email, autofocus: true, autocomplete: "email", placeholder: "メールアドレスを入力", class: "form-control" %>
+        <% @user.errors.where(:email).each do |error| %>
+          <p class="error-text"><%= error.full_message %></p>
+        <% end %>
+      </div>
+
+      <div class="field my-4">
+        <label for="user_password" class="form-esse">パスワード</label>
+        <%= f.text_field :password, type: "password", placeholder: "パスワードを入力", class: "form-control bg-success bg-opacity-10 border-success-subtle" %>
+        <% @user.errors.where(:password).each do |error| %>
+          <p class="error-text"><%= error.full_message %></p>
+        <% end %>
+      </div>
+
+      <div class="field my-4">
+        <label for="user_password_confirmation" class="form-esse">確認用パスワード</label>
+        <%= f.text_field :password_confirmation, type: "password", placeholder: "もう一度パスワードを入力", class: "form-control" %>
+        <% @user.errors.where(:password_confirmation).each do |error| %>
+          <p class="error-text"><%= error.full_message %></p>
+        <% end %>
+      </div>
+
+      <div class="actions mt-5">
+        <%= f.submit "新しいアカウントを作成", class: "btn btn-success btn-success-light w-100" %>
+      </div>
     <% end %>
+
+      <%= link_to "ゲストログインはこちら", users_guest_sign_in_path, method: :post, class: "btn btn-outline-danger w-100 mt-3 mb-4" %>
+
+      <%= link_to "アカウントを持っている方はこちら", new_user_session_path, class: "btn-signin" %>
+
+    </div>
   </div>
-
-  <div class="field my-4">
-    <label for="user_email" class="form-esse">メールアドレス</label>
-    <%= f.text_field :email, autofocus: true, autocomplete: "email", placeholder: "メールアドレスを入力", class: "form-control" %>
-    <% @user.errors.where(:email).each do |error| %>
-      <p class="error-text"><%= error.full_message %></p>
-    <% end %>
-  </div>
-
-  <div class="field my-4">
-    <label for="user_password" class="form-esse">パスワード</label>
-    <%= f.text_field :password, type: "password", placeholder: "パスワードを入力", class: "form-control bg-success bg-opacity-10 border-success-subtle" %>
-    <% @user.errors.where(:password).each do |error| %>
-      <p class="error-text"><%= error.full_message %></p>
-    <% end %>
-  </div>
-
-  <div class="field my-4">
-    <label for="user_password_confirmation" class="form-esse" %>確認用パスワード</label>
-    <%= f.text_field :password_confirmation, type: "password", placeholder: "もう一度パスワードを入力", class: "form-control" %>
-    <% @user.errors.where(:password_confirmation).each do |error| %>
-      <p class="error-text"><%= error.full_message %></p>
-    <% end %>
-  </div>
-
-  <div class="actions mt-5">
-    <%= f.submit "新しいアカウントを作成", class: "btn btn-success btn-success-light w-100" %>
-  </div>
-<% end %>
-
-<%= link_to "ゲストログインはこちら", users_guest_sign_in_path, method: :post, class: "btn btn-outline-danger w-100 mt-3 mb-4" %>
-
-<%= link_to "アカウントを持っている方はこちら", new_user_session_path, class: "btn-signin" %>
-
-</div>
-</div>
 </div>

@@ -12,7 +12,7 @@ class TopsController < ApplicationController
     high_rated = all_results.select { |store| store["rating"].to_f >= 4.0 }
     @results = high_rated.sample(4)
 
-    # @reviews = Review.order(created_at: :desc).limit(5) # 最新5件の口コミを表示
+    @reviews = Review.order(created_at: :desc).limit(5) # 最新5件の口コミを表示
   end
 
   def detail

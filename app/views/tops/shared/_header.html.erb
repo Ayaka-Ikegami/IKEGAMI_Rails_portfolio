@@ -20,7 +20,7 @@
             <i class="bi bi-person-circle text-secondary ms-2 me-3" style="font-size: 40px;"></i>
           <% end %>
 
-          <% if @user && @user.user_name.present? %>
+          <% if current_user.user_name.present? %>
             <div class="header-username d-none d-lg-block text-success fw-600 me-3"><%= current_user.user_name %></div>
           <% else %>
             <div class="header-username d-none d-lg-block text-success fw-600 me-3">ゲスト</div>
@@ -40,8 +40,8 @@
       <div class="header-links d-flex align-items-start flex-column flex-lg-row ms-lg-auto me-lg-3">
         <% if user_signed_in? %>
         <div class="nav-separator d-lg-none"></div>
-          <%= link_to "トップページ", root_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
           <%= link_to "検索する", stores_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
+          <%= link_to "口コミ一覧", reviews_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
         <div class="nav-separator d-lg-none"></div>
           <%= link_to "最強のうどん師とは", tops_detail_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
         <div class="nav-separator d-lg-none"></div>
@@ -49,8 +49,8 @@
           <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "header-link text-decoration-none text-danger fs-13 fw-800 ms-4 my-2" %>
         <% else %>
         <div class="nav-separator d-lg-none"></div>
-          <%= link_to "トップページ", root_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
           <%= link_to "検索する", stores_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
+          <%= link_to "口コミ一覧", reviews_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
         <div class="nav-separator d-lg-none"></div>
           <%= link_to "最強のうどん師とは", tops_detail_path, class: "header-link text-decoration-none text-secondary fs-13 ms-4 my-2" %>
         <div class="nav-separator d-lg-none"></div>
