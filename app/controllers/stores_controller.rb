@@ -59,6 +59,7 @@ class StoresController < ApplicationController
 
   def show # 各店舗の詳細ページ
     place_id = params[:place_id]
+    session[:last_place_id] = place_id
     api_key = ENV["PLACES_API_KEY"]
 
     uri = URI("https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&language=ja&key=#{api_key}")

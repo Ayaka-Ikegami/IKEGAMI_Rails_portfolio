@@ -34,6 +34,17 @@
       <%= render "tops/shared/header" %>
     </header>
     <%= yield %>
+      <!-- エラーフラッシュ表示用-->
+      <% if notice %>
+        <div class="css-notice alert alert-success alert-dismissible fade show" role="alert">
+          <%= notice %>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div class="css-alert alert-danger alert-dismissible fade show" role="alert">
+          <%= alert %>
+        </div>
+      <% end %>
     <footer class="shadow-sm">
       <%= render "tops/shared/footer" %>
     </footer>

@@ -56,21 +56,21 @@ body {
   font-style: italic;
 }
 
-.notice {
+.css-notice {
   position: fixed;
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
   width: fit-content;
-  background-color: rgb(213, 0, 110);
+  background-color: rgb(14, 255, 82);
   border-radius: 5px;
-  box-shadow: 0 0 8px rgb(114, 0, 72);
-  color: #fff;
+  box-shadow: 0 0 8px rgb(0, 114, 25);
+  color: #000000;
   padding: 10px 50px;
-  z-index: 10;
+  z-index: 100;
 }
 
-.alert {
+.css-alert {
   position: fixed;
   bottom: 15px;
   left: 50%;
@@ -81,5 +81,5 @@ body {
   box-shadow: 0 0 5px rgb(58, 0, 0);
   color: #fff;
   padding: 10px 50px;
-  z-index: 10;
+  z-index: 100;
 }

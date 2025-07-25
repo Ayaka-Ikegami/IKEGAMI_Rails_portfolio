@@ -1,4 +1,5 @@
-document.addEventListener("turbo:load", () => {
+["turbo:load", "turbo:render"].forEach((eventName) => {
+document.addEventListener(eventName, () => {
   const container = document.querySelector(".star-rating");
   if (!container) return;
 
@@ -47,4 +48,5 @@ document.addEventListener("turbo:load", () => {
       updateStars();
     }
   });
+});
 });

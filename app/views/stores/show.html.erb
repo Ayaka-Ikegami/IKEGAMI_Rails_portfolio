@@ -127,16 +127,6 @@
                 <%= form_with model: @review, url: reviews_path, local: true do |f| %>
                   <%= f.hidden_field :store_id, value: @store.id %>
 
-                  <% if @review&.errors.present? %>
-                    <div class="alert alert-danger">
-                      <ul class="mb-0">
-                        <% @review.errors.full_messages.each do |msg| %>
-                          <li><%= msg %></li>
-                        <% end %>
-                      </ul>
-                    </div>
-                  <% end %>
-
                   <div class="mb-3">
                     <%= f.label :rating, "評価", class: "form-label form-esse fw-bold" %>
                     <div class="star-rating" data-selected="<%= @review.rating || 0 %>">
@@ -151,6 +141,13 @@
                     <%= f.label :comment, "コメント", class: "form-label form-esse fw-bold" %>
                     <%= f.text_area :comment, rows: 4, class: "form-control", placeholder: "麺のコシや出汁の風味についてコメントしよう" %>
                   </div>
+                  
+                  <% @review.errors.where(:rating).each do |error| %>
+                    <p class="error-text"><%= error.full_message %></p>
+                  <% end %>
+                  <% @review.errors.where(:comment).each do |error| %>
+                    <p class="error-text"><%= error.full_message %></p>
+                  <% end %>
 
                   <%= f.submit "投稿する", class: "btn btn-success btn-success-light w-100" %>
                 <% end %>

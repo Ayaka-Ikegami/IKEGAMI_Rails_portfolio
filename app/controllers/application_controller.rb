@@ -13,4 +13,15 @@ class ApplicationController < ActionController::Base
   def store_user_location!
     store_location_for(:user, request.fullpath)
   end
+
+  def fetch_google_place_details(place_id)
+    api_key = ENV["PLACES_API_KEY"]
+    uri = URI("https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&language=ja&key=#{api_key}")
+    response = Net::HTTP.get(uri)
+    json = JSON.parse(response)
+
+  return json["result"] if json["status"] == "OK"
+
+    nil
+  end
 end

@@ -14,12 +14,21 @@ class ReviewsController < ApplicationController
   def create
     @review = Review.new(review_params)
     @review.user = current_user
+    @store = Store.find_by(id: review_params[:store_id])
 
     if @review.save
-      redirect_to store_path(@review.store.place_id), notice: "レビューを投稿しました"
+      session.delete(:last_place_id)
+      redirect_to store_path(@review.store.place_id), notice: "口コミを投稿しました"
     else
       # エラー時はstore/showに戻り、新しい順に並べる
+      place_id = session[:last_place_id]
+
+      if place_id.present?
+        @google_store = fetch_google_place_details(place_id)
+      end
+
       @reviews = @store.reviews.includes(:user).order(created_at: :desc)
+      flash.now[:alert] = "口コミが投稿できませんでした"
       render "stores/show", status: :unprocessable_entity
     end
   end
@@ -52,6 +61,7 @@ class ReviewsController < ApplicationController
     if @review.update(review_params)
       redirect_to users_profile_path(current_user), notice: "口コミを更新しました"
     else
+      flash.now[:alert] = "口コミを更新できませんでした"
       render :edit, status: :unprocessable_entity
     end
   end
