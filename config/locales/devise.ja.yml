@@ -31,7 +31,7 @@ ja:
       updated: 'パスワードが正しく変更されました。'
       updated_not_active: 'パスワードが正しく変更されました。'
     registrations:
-      destroyed: 'アカウントを削除しました。またのご利用をお待ちしております。'
+      destroyed: 'アカウントを削除しました。'
       signed_up: 'アカウント登録が完了しました。'
       signed_up_but_inactive: 'ログインするためには、アカウントを有効化してください。'
       signed_up_but_locked: 'アカウントが凍結されているためログインできません。'
