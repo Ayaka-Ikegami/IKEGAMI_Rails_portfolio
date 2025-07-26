@@ -1,1 +1,43 @@
-<h2>最強のうどん師とは　の説明ページ</h2>
+<div class="py-5 px-3">
+  
+  <section class="detail-section-1 container" style="max-width: 700px;">
+    <%= link_to '←前のページに戻る', request.referer || root_path, class: "text-decoration-none text-start" %>
+    <div class="text-center my-5">
+      <p class="text-muted">うどんが大好きな全人類に捧ぐ――。</p>
+      <h1 class="font-yuji fw-bold">「最強のうどん師」とは？</h1>
+    </div>
+      <ul class="list-unstyled fs-3 py-3 px-4">
+        <li class="font-yuji"><span class="text-success">一、</span>うどん店を検索できる。</li>
+        <li class="text-black-50 fs-15">「地名」や「店名」はもちろん、「現在地に近いお店」もすぐに検索できる。</li>
+        <li class="font-yuji mt-4"><span class="text-success">二、</span>うどん店の口コミを投稿できる。</li>
+        <li class="text-black-50 fs-15">お店の詳細ページから、直感的な操作で簡単に口コミを投稿できる。</li>
+        <li class="font-yuji mt-4"><span class="text-success">三、</span>うどん店の口コミを閲覧できる。</li>
+        <li class="text-black-50 fs-15">うどん好きの同志が投稿した口コミをすべて見られる。<br>お店の詳細ページでも、口コミ一覧ページでも、ユーザーの個別ページでも！</li>
+      </ul>
+
+    <h2 class="font-yuji text-center pt-4">「うどん」のみを追い求める、<br>ストイックなうどん人間のための<br>サービスです。</h2>
+  </section>
+
+  <section class="detail-section-2 container mt-3" style="max-width: 700px;">
+    <div class="row g-4 py-5">
+      <div class="col-12 col-md-6 text-center">
+        <%= link_to stores_path, class: "text-decoration-none" do %>
+          <div class="position-relative">
+            <div class="text-success mt-3 fw-bold fs-5">＼検索する／</div>
+            <%= image_tag "search_udon.png", class: "img-fluid rounded", alt: "うどん店を検索の画像" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="col-12 col-md-6 text-center">
+        <%= link_to reviews_path, class: "text-decoration-none" do %>
+          <div class="position-relative">
+            <div class="text-success mt-3 fw-bold fs-5">＼口コミを見る／</div>
+            <%= image_tag "reviews_udon.png", class: "img-fluid rounded", alt: "口コミを見る画像" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+</div>

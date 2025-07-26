@@ -1,4 +1,4 @@
-<div class="mb-3 p-3 border rounded-4 bg-light d-flex flex-column">
+<div class="mb-3 p-3 border shadow-sm rounded-4 bg-light d-flex flex-column">
 
   <!-- ヘッダー部分：店名 & 削除ボタン -->
   <div class="d-flex justify-content-between align-items-start">
@@ -6,7 +6,7 @@
       <% if show_store_info %>
         <% if review.store.present? %>
           <h5 class="mb-1 text-wrap" style="word-break: break-word;">
-            <%= link_to review.store.name, store_path(review.store.place_id), class: "text-decoration-none text-success mb-1" %>
+            <%= link_to review.store.name, store_path(review.store.place_id), class: "font-yuji text-decoration-none text-success mb-1" %>
           </h5>
         <% end %>
 

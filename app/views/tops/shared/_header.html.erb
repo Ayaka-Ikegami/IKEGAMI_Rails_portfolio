@@ -2,7 +2,7 @@
   <div class="container-fluid header-contents px-3">
 
     <!-- ヘッダー左側ロゴ -->
-    <%= link_to "最強のうどん師", root_path, class: "navbar-brand header-logo" %>
+    <%= link_to "最強のうどん師", root_path, class: "font-yuji navbar-brand header-logo fs-3 fw-bold" %>
 
     <!-- ヘッダー右側（ユーザーアイコン + ハンバーガーメニュー） -->
 
@@ -21,9 +21,9 @@
           <% end %>
 
           <% if current_user.user_name.present? %>
-            <div class="header-username d-none d-lg-block text-success fw-600 me-3"><%= current_user.user_name %></div>
+            <div class="header-username font-yuji d-none d-lg-block text-success fs-5 fw-600 me-3"><%= current_user.user_name %></div>
           <% else %>
-            <div class="header-username d-none d-lg-block text-success fw-600 me-3">ゲスト</div>
+            <div class="header-username font-yuji d-none d-lg-block text-success fs-5 fw-600 me-3">ゲスト</div>
           <% end %>
         <% end %>
 

@@ -9,7 +9,7 @@
       
       <!-- テキストエリア -->
       <div class="col-md-6 mb-4 mb-md-0 text-center text-md-start">
-        <h1 class="display-4 fw-bold">うどんは日本の宝物。</h1>
+        <h1 class="font-yuji display-4 fw-bold">うどんは日本の宝物。</h1>
         <p class="lead text-muted mt-3">
           「最強のうどん師」は、
           <br>うどん屋さんに特化した検索・口コミ共有サービスです。
@@ -30,8 +30,8 @@
 
       <!-- セクション2: 東京のうどん店 -->
       <div class="col-lg-8 mb-5">
-        <h2 class="mb-4 pb-2 border-bottom">
-          東京の高評価うどん店<span class="fs-5">（ランダム4店！）</span>
+        <h2 class="font-yuji mb-4 pb-2 border-bottom">
+          東京の高評価のお店<span class="fs-5">（ランダム4店！）</span>
         </h2>
 
         <% if @results.present? %>
@@ -49,10 +49,17 @@
                     <% end %>
 
                     <div class="card-body">
-                      <h5 class="card-title"><%= store["name"] %></h5>
-                      <p class="card-text text-muted"><%= store["formatted_address"] %></p>
+                      <h4 class="card-title font-yuji fw-bold text-success"><%= store["name"] %></h4>
+                      <% zips = store["formatted_address"].scan(/〒\d{3}-\d{4}|〒\d{7}/) %>
+                        <% zip = zips.first.to_s %>
+                        <% addr = store["formatted_address"]
+                              .gsub(/日本、?\s?/, "")       # 日本、 を消す
+                              .gsub(/〒\d{3}-?\d{4}/, "")  # すべての郵便番号を消す
+                        %>
+                      <div class="card-text text-muted fs-15"><%= zip %></div>
+                      <div class="card-text text-muted border-bottom pb-2 fs-15"><%= addr.strip %></div>
                       <% if store["rating"] %>
-                        <p class="mb-0">
+                        <p class="mb-0 pt-2">
                           評価: <%= number_with_precision(store["rating"], precision: 1) %>
                           <span class="text-warning">★</span>
                         </p>
@@ -74,12 +81,11 @@
         <% end %>
       </div>
 
-      <!-- セクション3: サイト内の口コミ -->
+      <!-- セクション3: サイト内口コミ最新5件表示 -->
       <div class="col-lg-4 mb-5 d-flex flex-column">
-        <h2 class="mb-4 pb-2 border-bottom">最新5件の口コミ</h2>
+        <h2 class="font-yuji mb-4 pb-2 border-bottom">最新5件の口コミ</h2>
 
         <% if @reviews.present? %>
-          <!-- スクロールコンテナ -->
           <div class="overflow-auto" style="max-height: 800px;">
             <% @reviews.each do |review| %>
               <div class="mb-4">

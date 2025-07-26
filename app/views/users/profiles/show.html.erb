@@ -1,15 +1,15 @@
 <div class="container p-4 mt-4 mb-5">
   <div class="profile-header d-flex justify-content-between align-items-center mb-5">
-    <h2>マイページ</h2>
-    <%= link_to '←戻る', request.referer || root_path, class: "btn btn-outline-success btn-success-light-hover" %>
+    <h2 class="font-yuji fw-bold">マイページ</h2>
+    <%= link_to '←前ページに戻る', request.referer || root_path, class: "text-decoration-none" %>
   </div>
 
   <div class="row">
     <!-- 左カラム: プロフィール -->
     <div class="col-md-7 mb-4">
-    <h4 class="my-3 border-bottom pb-2 fw-600">アカウント情報</h4>
+    <h4 class="font-yuji my-3 border-bottom pb-2 fw-600">アカウント情報</h4>
       <div class="card rounded-4 p-4 shadow-sm">
-        <div class="d-flex align-items-center mb-3">
+        <div class="d-flex align-items-end mb-3">
           <% if current_user.avatar.attached? %>
             <%= image_tag current_user.avatar.variant(resize_to_fill: [64, 64]), class: "rounded-circle me-3", alt: "プロフィール画像" %>
           <% else %>
@@ -17,21 +17,26 @@
           <% end %>
 
           <div>
-            <p class="mb-1 fs-4 fw-bold"><%= @user.user_name.presence || "ゲスト" %> さん</p>
+            <p><span class="font-yuji mb-1 me-2 fs-3 fw-bold"><%= @user.user_name.presence || "ゲスト" %></span>さん</p>
           </div>
         </div>
 
         <p>メールアドレス：<%= @user.email %></p>
         <p>登録日：<%= l(@user.created_at, format: :long) %></p>
 
-        <%= link_to "アカウント情報の編集", edit_user_registration_path, class: "btn btn-outline-success w-100 mt-3" %>
-        <%= link_to "ログアウトする", destroy_user_session_path, method: :delete, class: "text-danger d-block text-start mt-3" %>
+        <%= link_to "アカウント情報の編集", edit_user_registration_path, class: "btn btn-outline-success btn-success-light-hover mt-3" %>
+        <%= link_to "ログアウト", destroy_user_session_path, method: :delete, class: "btn btn-outline-danger mt-2" %>
+        <%= link_to "アカウントを削除する", user_registration_path, method: :delete, data: { confirm: "本当にアカウントを削除しますか？" }, class: "text-danger d-block text-start fs-15 mt-3" %>
+
       </div>
     </div>
 
     <!-- 右カラム: レビュー -->
     <div class="col-md-5">
-      <h4 class="my-3 border-bottom pb-2 fw-600">自分の口コミ一覧</h4>
+      <div class="d-flex justify-content-between my-3 border-bottom">
+        <h4 class="font-yuji fw-600">自分の口コミ</h4>
+        <h6>全<span class="font-yuji fs-4 fw-600 ms-1"><%= @user.reviews.count %></span>件</h6>
+      </div>
 
       <div style="max-height: 70vh; overflow-y: auto;">
         <% if @reviews.any? %>
@@ -42,7 +47,7 @@
           <p class="text-muted ps-2">まだ口コミを投稿していません。</p>
         <% end %>
       </div>
-      
+
     </div>
 
   </div>

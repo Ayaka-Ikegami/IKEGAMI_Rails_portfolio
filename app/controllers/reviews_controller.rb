@@ -1,5 +1,5 @@
 class ReviewsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_user!, except: %i[index]
   before_action :set_store, only: %i[new create]
 
   def index # 口コミ一覧
@@ -18,7 +18,7 @@ class ReviewsController < ApplicationController
 
     if @review.save
       session.delete(:last_place_id)
-      redirect_to store_path(@review.store.place_id), notice: "口コミを投稿しました"
+      redirect_to store_path(@review.store.place_id), notice: "口コミを投稿しました。"
     else
       # エラー時はstore/showに戻り、新しい順に並べる
       place_id = session[:last_place_id]
@@ -28,7 +28,7 @@ class ReviewsController < ApplicationController
       end
 
       @reviews = @store.reviews.includes(:user).order(created_at: :desc)
-      flash.now[:alert] = "口コミが投稿できませんでした"
+      flash.now[:alert] = "口コミを投稿できませんでした。"
       render "stores/show", status: :unprocessable_entity
     end
   end
@@ -59,9 +59,9 @@ class ReviewsController < ApplicationController
 
     @store = @review.store
     if @review.update(review_params)
-      redirect_to users_profile_path(current_user), notice: "口コミを更新しました"
+      redirect_to users_profile_path(current_user), notice: "口コミを編集しました。"
     else
-      flash.now[:alert] = "口コミを更新できませんでした"
+      flash.now[:alert] = "口コミを編集できませんでした。"
       render :edit, status: :unprocessable_entity
     end
   end
@@ -70,9 +70,9 @@ class ReviewsController < ApplicationController
     @review = current_user.reviews.find_by(id: params[:id])
     if @review
       @review.destroy
-      redirect_to users_profile_path(current_user), notice: "レビューを削除しました"
+      redirect_to users_profile_path(current_user), notice: "口コミを削除しました。"
     else
-      redirect_to users_profile_path(current_user), alert: "レビューが見つかりません"
+      redirect_to users_profile_path(current_user), alert: "口コミが見つかりません。"
     end
   end
 

@@ -1,7 +1,11 @@
-<div class="footer-contents p-2">
-  <%= link_to "最強のうどん師", root_path, class: "footer-logo text-dark" %>
-  <p class="footer-copyright fs-6">Copyright©️最強のうどん師 2025 All right reserved</p>
-  <%= link_to "最強のうどん師とは", tops_detail_path, class: "footer-text text-decoration-none text-secondary me-3" %>
-  <%= link_to "利用規約", tops_tos_path, class: "footer-text text-decoration-none text-secondary me-3" %>
-  <%= link_to "プライバシーポリシー", tops_privacy_path, class: "footer-text text-decoration-none text-secondary me-3" %>
+<div class="footer-contents px-3">
+  <%= link_to root_path, class: "footer-logo d-inline-block" do %>
+    <%= image_tag "saikyo_udon_logo.png", alt: "最強のうどん師のロゴ", class: "img-fluid", style: "height: 90px;" %>
+  <% end %>
+
+  <p class="footer-copyright text-secondary fs-15 mt-2">Copyright©️最強のうどん師 2025 All right reserved</p>
+
+  <%= link_to "最強のうどん師とは", tops_detail_path, class: "footer-text text-decoration-none text-secondary fs-13 me-3" %>
+  <%= link_to "利用規約", tops_tos_path, class: "footer-text text-decoration-none text-secondary fs-13 me-3" %>
+  <%= link_to "プライバシーポリシー", tops_privacy_path, class: "footer-text text-decoration-none text-secondary fs-13 me-3" %>
 </div>

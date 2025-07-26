@@ -37,7 +37,7 @@ class StoresController < ApplicationController
 
     else
       @results = []
-      flash.now[:alert] = "検索条件を入力してください"
+      flash.now[:alert] = "検索条件を入力してください。"
       render :index
       return
     end
@@ -69,7 +69,7 @@ class StoresController < ApplicationController
     if json["status"] == "OK"
       @google_store = json["result"]
     else
-      redirect_to root_path, alert: "店舗情報が取得できませんでした（#{json['status']}）"
+      redirect_to root_path, alert: "店舗情報が取得できませんでした。（#{json['status']}）"
       return
     end
 
