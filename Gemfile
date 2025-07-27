@@ -51,6 +51,7 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem "rspec-rails"
+  gem "factory_bot_rails"
 end
 
 group :development do
@@ -63,6 +64,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webmock"
+  gem "rack_session_access"
 end
 
 gem "dartsass-rails"
@@ -79,3 +81,5 @@ gem "image_processing", "~> 1.2"
 
 gem "kaminari"
 gem "ransack"
+
+gem "launchy", "~> 3.1"

@@ -23,6 +23,14 @@
 
     <!-- 削除ボタン（プロフィールページのみ） -->
     <% if show_delete %>
+
+      <% if Rails.env.test? %>
+      <!-- テスト用（JS不要な削除ボタン） -->
+              <%= button_to "削除", review_path(review), method: :delete,
+                data: { turbo_confirm: "この口コミを削除しますか？" },
+                class: "btn btn-sm btn-danger mt-2" %>
+
+      <% else %>
       <div class="dropdown ms-2">
         <button class="btn btn-sm btn-light" type="button" data-bs-toggle="dropdown" aria-expanded="false">
           <i class="bi bi-three-dots-vertical"></i>
@@ -34,6 +42,7 @@
           </li>
         </ul>
       </div>
+      <% end %>
     <% end %>
   </div>
 

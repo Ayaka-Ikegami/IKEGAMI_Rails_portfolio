@@ -1,12 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe "口コミ投稿", type: :system, js: true do
+RSpec.describe "口コミ投稿のバリデーション", type: :system, js: true do
   before { puts "テスト開始" }
   after  { puts "テスト終了" }
 
   before do
     driven_by(:selenium_chrome_headless)
 
+    # Google APIのスタブ
     stub_request(:get, /maps.googleapis.com/).to_return(
       body: {
         status: "OK",
@@ -19,7 +20,7 @@ RSpec.describe "口コミ投稿", type: :system, js: true do
     )
   end
 
-  it "ログインユーザーが口コミを投稿（コメント、レーティングどちらも入力）" do
+  it "レーティングが未選択だとバリデーションエラーになり、口コミは投稿されない" do
     user = User.create!(user_name: "テストうどん", email: "test@example.com", password: "password")
     store = Store.create!(name: "スタブ店舗", address: "うどん県", place_id: "test_place_id")
     # ログインする
@@ -35,33 +36,20 @@ RSpec.describe "口コミ投稿", type: :system, js: true do
     puts "口コミページへ移動"
     puts "口コミページのURL: #{current_url}"
 
-    # 星をクリック（data-value="4" を選択）
-    find(".star[data-value='4']").click
-    puts "星を押して評価した"
-
-    # hidden_fieldの値を確認
-    rating_value = find("#rating-field", visible: false).value
-    puts "hidden_fieldのratingの値: #{rating_value}"
-    expect(rating_value).to eq "4"
+    # レーティングは選択しない！星はノットクリック！
 
     # コメントを入力
-    fill_in "コメント", with: "コシが最高で出汁もうまい！"
+    fill_in "コメント", with: "レーティング未選択！コシのあるうどん"
+    puts "コメント入力"
 
     # 投稿ボタンをクリック
     click_button "投稿する"
     puts "口コミ投稿ボタンクリック"
 
-    # 投稿が表示されていることを確認
-    expect(page).to have_content("コシが最高で出汁もうまい！")
-    expect(page).to have_css(".mb-2 .text-warning", count: 4) # /views/shared/_review_cardにあわせて
-
-    # 表示されたコメントと評価をputsで確認
-    comment_text = find("p.mb-3").text rescue "コメントが見つかりません"
-    puts "表示されたコメント: #{comment_text}"
-
-    # 星の数をカウント
-    star_count = all(".mb-2 .text-warning").count
-    puts "表示された星の数: #{star_count}"
+    # バリデーションにより、投稿が失敗したことを確認
+    expect(page).to have_current_path(new_review_path, ignore_query: true) # POST先でrender :new想定
+    expect(page).to have_content("口コミを投稿できませんでした。") # flash.now[:alert] の確認
+    expect(page).to have_selector("form") # フォームが再表示されているか？
 
     puts "投稿ボタン押下後のURL: #{current_url}"
   end

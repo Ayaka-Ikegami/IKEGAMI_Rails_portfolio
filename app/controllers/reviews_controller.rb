@@ -23,7 +23,7 @@ class ReviewsController < ApplicationController
 
     if @review.save
       session.delete(:last_place_id)
-      redirect_to store_path(@review.store.place_id), notice: "口コミを投稿しました。"
+      redirect_to users_profile_path, notice: "口コミを投稿しました。"
     else
       flash.now[:alert] = "口コミを投稿できませんでした。"
       render :new, status: :unprocessable_entity
