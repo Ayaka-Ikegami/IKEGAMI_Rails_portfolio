@@ -83,3 +83,5 @@ gem "kaminari"
 gem "ransack"
 
 gem "launchy", "~> 3.1"
+
+gem "pg", group: [ :production ]
