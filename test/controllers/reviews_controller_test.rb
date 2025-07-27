@@ -11,6 +11,6 @@ class ReviewsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create" do
     post reviews_url, params: { review: { store_id: @store.id, rating: 5, comment: "テストレビュー" } }
-    assert_redirected_to store_path(@store.place_id)
+    assert_redirected_to users_profile_path
   end
 end
