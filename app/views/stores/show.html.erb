@@ -122,40 +122,12 @@
       <div class="card shadow-sm rounded-4 small">
         <div class="card-body px-3 py-4">
 
-          <!-- 投稿フォーム -->
+          <!-- 投稿ページへ移動 -->
           <% if user_signed_in? %>
-            <div class="card shadow-sm rounded-4">
-              <div class="card-body px-4 py-4">
-                <h5 class="card-title font-yuji pb-3 border-bottom mb-3 text-success fw-600">口コミを投稿する</h5>
-
-                <%= form_with model: @review, url: reviews_path, local: true do |f| %>
-                  <%= f.hidden_field :store_id, value: @store.id %>
-
-                  <div class="mb-3">
-                    <%= f.label :rating, "評価", class: "form-label form-esse fw-bold" %>
-                    <div class="star-rating" data-selected="<%= @review.rating || 0 %>">
-                      <% 1.upto(5) do |i| %>
-                        <span class="star" data-value="<%= i %>">★</span>
-                      <% end %>
-                      <%= f.hidden_field :rating, id: "rating-field" %>
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <%= f.label :comment, "コメント", class: "form-label form-esse fw-bold" %>
-                    <%= f.text_area :comment, rows: 5, placeholder: "麺のコシや出汁の風味についてコメントしよう", class: "form-control bg-success bg-opacity-10 border-success-subtle rounded-4" %>
-                  </div>
-
-                  <% @review.errors.where(:rating).each do |error| %>
-                    <p class="error-text"><%= error.full_message %></p>
-                  <% end %>
-                  <% @review.errors.where(:comment).each do |error| %>
-                    <p class="error-text"><%= error.full_message %></p>
-                  <% end %>
-
-                  <%= f.submit "投稿する", class: "btn btn-success btn-success-light w-100" %>
-                <% end %>
-              </div>
+            <div class="mb-4 text-end">
+              <%= link_to new_review_path(store_id: @store.id), class: "btn btn-success-light w-100 py-4 fs-5 d-inline-flex align-items-center justify-content-center gap-2" do %>
+                <i class="bi bi-pencil-square"></i>口コミを投稿する
+              <% end %>
             </div>
           <% else %>
             <p class="text-muted">口コミを投稿するには<%= link_to "ログイン", new_user_session_path %>してください。</p>

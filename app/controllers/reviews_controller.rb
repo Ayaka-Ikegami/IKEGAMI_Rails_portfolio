@@ -1,6 +1,5 @@
 class ReviewsController < ApplicationController
   before_action :authenticate_user!, except: %i[index]
-  before_action :set_store, only: %i[new create]
 
   def index # 口コミ一覧
     @q = Review.includes(:store, :user).ransack(params[:q])
@@ -9,6 +8,12 @@ class ReviewsController < ApplicationController
 
   def new
     @review = Review.new
+    @store = Store.find_by(id: params[:store_id])
+
+    unless @store
+      redirect_to root_path, alert: "店舗が見つかりません。"
+      nil
+    end
   end
 
   def create
@@ -20,16 +25,8 @@ class ReviewsController < ApplicationController
       session.delete(:last_place_id)
       redirect_to store_path(@review.store.place_id), notice: "口コミを投稿しました。"
     else
-      # エラー時はstore/showに戻り、新しい順に並べる
-      place_id = session[:last_place_id]
-
-      if place_id.present?
-        @google_store = fetch_google_place_details(place_id)
-      end
-
-      @reviews = @store.reviews.includes(:user).order(created_at: :desc)
       flash.now[:alert] = "口コミを投稿できませんでした。"
-      render "stores/show", status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -77,11 +74,6 @@ class ReviewsController < ApplicationController
   end
 
   private
-
-  # store_idはフォームから送られてくる（ビューファイルに記載）
-  def set_store
-    @store = Store.find(params[:store_id] || params.dig(:review, :store_id))
-  end
 
   def review_params
     params.require(:review).permit(:store_id, :rating, :comment)
