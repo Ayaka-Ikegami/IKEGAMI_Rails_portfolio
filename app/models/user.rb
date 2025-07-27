@@ -4,7 +4,7 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
   :recoverable, :rememberable
 
-  validates :user_name, presence: true, length: { maximum: 10 }
+  validates :user_name, presence: true, length: { maximum: 15 }
   validates :email, presence: true
   validates :password, presence: true, confirmation: true, on: :create
 
@@ -14,7 +14,7 @@ class User < ApplicationRecord
 def self.guest
   find_or_create_by!(email: "guest@example.com") do |user|
     user.password = SecureRandom.urlsafe_base64
-    user.name = "ゲスト"
+    user.user_name = "ゲスト"
   end.tap do |user|
     user.update(user_name: "ゲスト") if user.user_name.blank?
   end

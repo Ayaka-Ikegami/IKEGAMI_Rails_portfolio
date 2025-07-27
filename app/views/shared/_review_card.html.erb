@@ -67,7 +67,7 @@
 
   <!-- 投稿日時と経過時間 -->
   <div class="d-flex justify-content-between">
-    <small class="text-muted fs-13"><%= review.created_at.strftime("%Y/%m/%d %H:%M") %></small>
+    <small class="text-muted fs-13"><%= l(review.created_at, format: :long) %></small>
     <small class="text-muted fs-13"><%= time_ago_in_words(review.created_at).gsub("約 ", "") %>前</small>
   </div>
 
