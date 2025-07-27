@@ -59,7 +59,7 @@ class StoresController < ApplicationController
 
   def show # 各店舗の詳細ページ
     place_id = params[:place_id]
-    session[:last_place_id] = place_id
+    session[:last_place_id] = place_id # 最後に見た店舗のidをDBに保存
     api_key = ENV["PLACES_API_KEY"]
 
     uri = URI("https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&language=ja&key=#{api_key}")
@@ -79,6 +79,5 @@ class StoresController < ApplicationController
     @store.save!
 
     @reviews = @store.reviews.includes(:user).order(created_at: :desc)
-    @review = Review.new  # 口コミレビュー新規投稿
   end
 end
