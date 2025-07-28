@@ -72,6 +72,7 @@ document.addEventListener("turbo:load", () => {
 
   // リセットボタン処理
   resetButton?.addEventListener("click", () => {
+    e.preventDefault();
     locationInput.value = "";
     keywordInput.value = "";
     useCurrentLocation.checked = false;
@@ -85,5 +86,7 @@ document.addEventListener("turbo:load", () => {
   locationInput.addEventListener("input", toggleInputs);
   keywordInput.addEventListener("input", toggleInputs);
 
+  latInput.value = "";
+  lngInput.value = "";
   toggleInputs(); // 初期化
 });

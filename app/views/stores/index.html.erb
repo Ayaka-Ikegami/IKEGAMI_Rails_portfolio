@@ -4,7 +4,7 @@
     <h2 class="font-yuji fw-bold mt-3 mb-4">うどん店を探す</h2>
   </div>
 
-<%= form_with url: search_stores_path, method: :get, local: true, id: "search-form", class: "store-search-form border rounded-4 shadow-sm bg-light p-4 mx-3" do %>
+<%= form_with url: search_stores_path, method: :get, local: true, data: { turbo: false }, id: "search-form", class: "store-search-form border rounded-4 shadow-sm bg-light p-4 mx-3" do %>
 
   <!-- 地域検索ゾーン（現在地 or 地名 必須） -->
   <div class="row g-3 align-items-end border-bottom pb-3 mb-3">
@@ -17,14 +17,14 @@
           <%= check_box_tag :use_current_location, '1', false, id: "use-current-location", class: "form-check-input" %>
           <label class="form-check-label" for="use-current-location">現在地で検索する</label>
         </div>
-        <%= select_tag :radius, options_for_select([[ "200m", 200 ], [ "500m", 500 ], [ "1km", 1000 ], [ "3km", 3000 ]], params[:radius]), class: "form-select w-auto rounded-4", id: "radius-select", disabled: true %>
+        <%= select_tag :radius, options_for_select([[ "200m", 200 ], [ "500m", 500 ], [ "1km", 1000 ], [ "3km", 3000 ]], @radius), class: "form-select w-auto rounded-4", id: "radius-select", disabled: true %>
       </div>
     </div>
 
     <!-- 地名入力 -->
     <div class="col-md-6">
       <label for="location-input" class="form-label text-success">地名で検索</label>
-      <%= text_field_tag :location, params[:location], placeholder: "例: 池袋、新宿など", class: "form-control rounded-4", id: "location-input" %>
+      <%= text_field_tag :location, @location, placeholder: "例: 池袋、新宿など", class: "form-control rounded-4", id: "location-input" %>
     </div>
 
   </div>
@@ -33,7 +33,7 @@
   <div class="row g-3 mb-4">
     <div class="col-md-12">
       <label for="keyword" class="form-label text-success">キーワード検索</label>
-      <%= text_field_tag :keyword, params[:keyword], placeholder: "例: 釜玉うどん、天ぷらなど", class: "form-control bg-success bg-opacity-10 border-success-subtle rounded-4" %>
+      <%= text_field_tag :keyword, @keyword, placeholder: "例: 釜玉うどん、天ぷらなど", class: "form-control bg-success bg-opacity-10 border-success-subtle rounded-4" %>
     </div>
   </div>
 
@@ -41,13 +41,13 @@
   <div class="row g-3 mb-3">
   <div class="col-md-4">
     <label for="sort" class="form-label text-success">並び替え</label>
-    <%= select_tag :sort, options_for_select([["おすすめ順（Googleデフォルト）", ""], ["評価順", "rating"]], params[:sort]), class: "form-select rounded-4" %>
+    <%= select_tag :sort, options_for_select([["おすすめ順（Googleデフォルト）", ""], ["評価順", "rating"]], @sort), class: "form-select rounded-4" %>
   </div>
   </div>
 
   <!-- 緯度経度hidden -->
-  <%= hidden_field_tag :lat, params[:lat], id: "lat-input" %>
-  <%= hidden_field_tag :lng, params[:lng], id: "lng-input" %>
+  <%= hidden_field_tag :lat, @lat, id: "lat-input" %>
+  <%= hidden_field_tag :lng, @lng, id: "lng-input" %>
 
   <!-- 検索ボタン -->
   <div class="row mt-3">
@@ -62,18 +62,18 @@
   <!-- 検索結果表示 -->
   <% if @results.present? %>
 
-    <% if params[:keyword].present? || params[:location].present? || (params[:lat].present? && params[:lng].present?) %>
+    <% if @keyword.present? || @location.present? || (@lat.present? && @lng.present?) %>
       <div class="mt-5 ms-3">
         <span class="text-muted">
           「
           <%= begin
-            if params[:location].present?
-              [params[:location], params[:keyword]].compact.reject(&:blank?).join(" × ")
-            elsif params[:lat].present? && params[:lng].present?
+            if @location.present?
+              [@location, @keyword].compact.reject(&:blank?).join(" × ")
+            elsif @lat.present? && @lng.present?
               # 現在地検索の場合
-              ["現在地", params[:keyword]].compact.reject(&:blank?).join(" × ")
+              ["現在地", @keyword].compact.reject(&:blank?).join(" × ")
             else
-              params[:keyword]
+              @keyword
             end
           end %>
           」で検索中……

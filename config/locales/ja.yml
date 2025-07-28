@@ -48,3 +48,11 @@ ja:
     formats:
       default: "%Y/%m/%d"
       long: "%Y/%m/%d %H:%M"
+  google_api:
+    status:
+      ZERO_RESULTS: "該当する店舗が見つかりませんでした。"
+      INVALID_REQUEST: "リクエストが不正です。もう一度お試しください。"
+      OVER_QUERY_LIMIT: "検索回数の上限に達しました。"
+      REQUEST_DENIED: "APIキーが無効です。"
+      UNKNOWN_ERROR: "エラーが発生しました。時間をおいて再度お試しください。"
+      default: "不明なエラーが発生しました（%{status}）"

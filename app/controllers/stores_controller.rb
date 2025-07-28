@@ -9,49 +9,52 @@ class StoresController < ApplicationController
 
   def search
     api_key = ENV["PLACES_API_KEY"]
-    keyword = params[:keyword].presence || "うどん" # 検索デフォルト「うどん」
 
-    # 並び替え設定（評価順なら"rating"）
-    rankby = params[:sort] == "rating" ? "" : "prominence" # Googleは"prominence"がデフォルト
-    order_by_rating = params[:sort] == "rating"
+    @location = params[:location]
+    @lat      = params[:lat]
+    @lng      = params[:lng]
+    @radius   = params[:radius] || 1000
+    @sort     = params[:sort]
+    @keyword  = params[:keyword].to_s.strip
 
-    if params[:lat].present? && params[:lng].present?
-      lat = params[:lat]
-      lng = params[:lng]
-      radius = params[:radius].presence || 1000
-      encoded_keyword = URI.encode_www_form_component(keyword)
+    order_by_rating = @sort == "rating"
 
-      # note: rankby=distanceの場合、radiusを指定できない
-      query = URI("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=#{lat},#{lng}&radius=#{radius}&keyword=#{encoded_keyword}&language=ja&key=#{api_key}")
+    # 「うどん」はキーワードに強制的に加える（API用のみ）
+    keyword_for_api = @keyword.present? ? "うどん #{@keyword}" : "うどん"
+    encoded_keyword = URI.encode_www_form_component(keyword_for_api)
 
-    elsif params[:location].present?
-      # 地名からの検索
-      query_string = "#{params[:location]} #{keyword}"
-      encoded_query = URI.encode_www_form_component(query_string)
+    # 検索条件の優先順位
+    if @lat.present? && @lng.present?
+      # 現在地がある → Nearby Search
+      query = URI("https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=#{@lat},#{@lng}&radius=#{@radius}&keyword=#{encoded_keyword}&language=ja&key=#{api_key}")
+
+    elsif @location.present?
+      # 地名がある → Text Search
+      encoded_query = URI.encode_www_form_component("#{@location} #{keyword_for_api}")
       query = URI("https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{encoded_query}&language=ja&region=jp&key=#{api_key}")
 
-    elsif keyword.present?
-      # キーワードだけの検索（地域なし）
-      encoded_keyword = URI.encode_www_form_component(keyword)
-      query = URI("https://maps.googleapis.com/maps/api/place/textsearch/json?query=#{encoded_keyword}&language=ja&region=jp&key=#{api_key}")
+    elsif @keyword.present?
+      # 地名なし・現在地なし・キーワードあり → 現在地取得失敗 or OFF だけど nearby で試みたい
+      flash.now[:alert] = "現在地が取得できていないため、位置情報を許可するか、地名を入力してください。"
+      @results = []
+      render :index and return
 
     else
-      @results = []
+      # 条件が何もない
       flash.now[:alert] = "検索条件を入力してください。"
-      render :index
-      return
+      @results = []
+      render :index and return
     end
 
     response = Net::HTTP.get(query)
     json = JSON.parse(response)
 
     if json["status"] == "OK"
-      @results = json.dig("results") || []
+      @results = json["results"] || []
       @results = @results.sort_by { |r| -r["rating"].to_f } if order_by_rating
       @results = @results.first(20)
     else
       @results = []
-      flash.now[:alert] = "検索エラー: #{json['status']}"
     end
 
     render :index
