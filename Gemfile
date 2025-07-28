@@ -84,4 +84,4 @@ gem "ransack"
 
 gem "launchy", "~> 3.1"
 
-gem "pg", "1.5.4", group: [ :production ]
+gem "pg", "1.6.0", group: [ :production ]
