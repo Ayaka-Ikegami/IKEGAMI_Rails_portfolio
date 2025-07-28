@@ -60,26 +60,31 @@ class StoresController < ApplicationController
     render :index
   end
 
-  def show # 各店舗の詳細ページ
+  def show
     place_id = params[:place_id]
-    session[:last_place_id] = place_id # 最後に見た店舗のidをDBに保存
+    session[:last_place_id] = place_id
     api_key = ENV["PLACES_API_KEY"]
 
-    uri = URI("https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&language=ja&key=#{api_key}")
-    response = Net::HTTP.get(uri)
-    json = JSON.parse(response)
-
-    if json["status"] == "OK"
-      @google_store = json["result"]
-    else
-      redirect_to root_path, alert: "店舗情報が取得できませんでした。（#{json['status']}）"
-      return
-    end
-
     @store = Store.find_or_initialize_by(place_id: place_id)
-    @store.name = @google_store["name"]
-    @store.address = @google_store["formatted_address"]
-    @store.save!
+
+    # place_id がテスト用またはプレースホルダーの場合、Google APIに問い合わせない
+    if place_id.start_with?("test-place")
+      @google_store = nil
+    else
+      uri = URI("https://maps.googleapis.com/maps/api/place/details/json?place_id=#{place_id}&language=ja&key=#{api_key}")
+      response = Net::HTTP.get(uri)
+      json = JSON.parse(response)
+
+      if json["status"] == "OK"
+        @google_store = json["result"]
+        @store.name    ||= @google_store["name"]
+        @store.address ||= @google_store["formatted_address"]
+        @store.save!
+      else
+        @google_store = nil
+        flash.now[:alert] = "Googleから店舗情報を取得できませんでした。（#{json['status']}）"
+      end
+    end
 
     @reviews = @store.reviews.includes(:user).order(created_at: :desc)
   end

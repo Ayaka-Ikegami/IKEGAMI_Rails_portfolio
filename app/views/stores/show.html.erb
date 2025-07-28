@@ -1,14 +1,14 @@
 <div class="container p-4 mt-4 mb-5">
 
   <%= link_to '←戻る', request.referer || root_path, class: "text-decoration-none text-start" %>
-  <h1 class="font-yuji text-success mt-3 mb-4 fw-800"><%= @google_store["name"] %></h1>
+  <h1 class="font-yuji text-success mt-3 mb-4 fw-800"><%= @google_store&.[]("name") || @store.name %></h1>
 
   <div class="row g-4">
     <!-- 左：地図 + 写真 + 店舗情報 -->
     <div class="col-12 col-md-7">
 
       <!-- 地図 -->
-      <% if @google_store.dig("geometry", "location") %>
+      <% if @google_store&.dig("geometry", "location") %>
         <% lat = @google_store["geometry"]["location"]["lat"] %>
         <% lng = @google_store["geometry"]["location"]["lng"] %>
         <div class="rounded-4 shadow-sm overflow-hidden mb-3" style="height: 250px;">
@@ -25,7 +25,7 @@
 
       <!-- 写真 + 店舗情報 -->
       <div class="card shadow-sm rounded-4">
-        <% if @google_store["photos"] %>
+        <% if @google_store&.[]("photos") %>
           <div id="photo-carousel" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner rounded-top-4" style="height: 250px;">
               <% @google_store["photos"].first(3).each_with_index do |photo, i| %>
@@ -55,16 +55,18 @@
             <tbody>
               <tr>
                 <th class="text-end text-muted fw-bold border-end pe-2">店名</th>
-                <td><%= @google_store["name"] %></td>
+                <td><%= @google_store&.[]("name") || @store.name %></td>
               </tr>
               <tr>
                 <th class="text-end text-muted fw-bold border-end pe-2" style="width: 90px;">住所</th>
                 <td>
-                  <% if @google_store["formatted_address"] %>
+                  <% if @google_store&.[]("formatted_address") %>
                     <% zip = @google_store["formatted_address"].match(/〒\d{3}-\d{4}|〒\d{7}/).to_s %>
                     <% addr = @google_store["formatted_address"].gsub(/日本、?\s?〒?\d{3}-?\d{4}/, "") %>
                     <div><%= zip %></div>
                     <div><%= addr.strip %></div>
+                  <% elsif @store.address.present? %>
+                    <div><%= @store.address %></div>
                   <% else %>
                     情報なし
                   <% end %>
@@ -72,15 +74,15 @@
               </tr>
               <tr>
                 <th class="text-end text-muted fw-bold border-end pe-2">電話番号</th>
-                <td><%= @google_store["formatted_phone_number"] || "情報なし" %></td>
+                <td><%= @google_store&.[]("formatted_phone_number") || "情報なし" %></td>
               </tr>
-              <% if @google_store["rating"] %>
+              <% if @google_store&.[]("rating") %>
                 <tr>
                   <th class="text-end text-muted fw-bold border-end pe-2">評価</th>
                   <td><%= @google_store["rating"] %> / 5</td>
                 </tr>
               <% end %>
-              <% if @google_store.dig("opening_hours", "open_now") != nil %>
+              <% if @google_store&.dig("opening_hours", "open_now") != nil %>
                 <% open_now = @google_store["opening_hours"]["open_now"] %>
                 <tr class="<%= open_now ? 'bg-success-subtle' : 'bg-danger-subtle' %>">
                   <th class="text-end text-muted fw-bold border-end pe-2">営業状況</th>
@@ -93,7 +95,7 @@
                   </td>
                 </tr>
               <% end %>
-              <% if @google_store.dig("opening_hours", "weekday_text") %>
+              <% if @google_store&.dig("opening_hours", "weekday_text") %>
                 <tr>
                   <th class="text-end text-muted fw-bold border-end pe-2 align-top">営業時間</th>
                   <td>
@@ -105,12 +107,14 @@
                   </td>
                 </tr>
               <% end %>
-              <tr>
-                <th class="text-end text-muted fw-bold border-end pe-2">マップ</th>
-                <td>
-                  <a href="<%= @google_store["url"] %>" target="_blank" class="btn btn-outline-success btn-success-light-hover btn-sm">Googleマップで見る（別タブ）</a>
-                </td>
-              </tr>
+              <% if @google_store&.[]("url") %>
+                <tr>
+                  <th class="text-end text-muted fw-bold border-end pe-2">マップ</th>
+                  <td>
+                    <a href="<%= @google_store["url"] %>" target="_blank" class="btn btn-outline-success btn-success-light-hover btn-sm">Googleマップで見る（別タブ）</a>
+                  </td>
+                </tr>
+              <% end %>
             </tbody>
           </table>
         </div> <!-- card-body -->
